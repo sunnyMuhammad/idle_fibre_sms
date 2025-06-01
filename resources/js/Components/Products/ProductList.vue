@@ -72,8 +72,7 @@ if (page.props.flash.status == true) {
                             v-if="image"
                             :src="`/uploads/${image}`"
                             :alt="image"
-                            width="40"
-                            class="object-cover"
+                            class="object-cover h-[50px] w-[50px]"
                         />
                     </div>
                 </template>
