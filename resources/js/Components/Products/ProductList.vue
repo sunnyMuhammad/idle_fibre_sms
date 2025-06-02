@@ -78,7 +78,7 @@ if (page.props.flash.status == true) {
                 </template>
 
                 <template #item-action="{ id }">
-                    <div class="flex flex-wrap gap-1 justify-center py-1">
+                    <div class="flex gap-1">
                         <Link
                             v-if="page.props.user.role != 'moderator'"
                             :href="`/product-save-page?product_id=${id}`"
