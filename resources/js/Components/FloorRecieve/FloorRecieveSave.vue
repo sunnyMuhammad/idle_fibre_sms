@@ -36,7 +36,7 @@ const submitForm = () => {
       <div class="float-right mb-4">
         <Link
           href="/list-product"
-          class="bg-green-600 hover:bg-green-700 text-white text-sm py-1 px-3 rounded"
+          class="bg-green-600 hover:bg-green-700 text-white text-sm py-1 px-3 rounded transition duration-300"
         >
           Back
         </Link>

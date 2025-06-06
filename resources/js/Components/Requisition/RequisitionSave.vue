@@ -75,7 +75,7 @@
                     </button>
                     <button
                         @click="addProduct"
-                        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300"
                     >
                         Confirm
                     </button>
@@ -190,7 +190,7 @@
                 <template #item-action="{ id, unit, name, unit_type }">
                     <button
                         @click="showModal(id, unit, name, unit_type)"
-                        class="bg-blue-500 text-white font-bold py-2 px-4 rounded"
+                        class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
                     >
                         Add
                     </button>

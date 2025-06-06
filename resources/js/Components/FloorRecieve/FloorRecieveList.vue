@@ -61,23 +61,23 @@ if (page.props.flash.status == true) {
                 >
                     <template #item-action="{ id }">
                         <div
-                            class="flex flex-wrap gap-1 justify-center pt-1 pb-1"
+                            class="flex flex-wrap gap-1"
                         >
                             <Link
                                 :href="`/edit-floor-recieve-page?id=${id}`"
-                                class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded text-xs"
+                                class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded text-xs transition duration-300"
                             >
                                 <span class="material-icons text-sm">edit</span>
                             </Link>
                             <button
                                 @click="approvedRequest(id)"
-                                class="bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded text-xs"
+                                class="bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded text-xs transition duration-300"
                             >
                                 Approve
                             </button>
                             <button
                                 @click="cancelRequest(id)"
-                                class="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded text-xs"
+                                class="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded text-xs transition duration-300"
                             >
                                  <span class="material-icons text-sm">close</span>
                             </button>

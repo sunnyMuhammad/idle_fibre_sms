@@ -39,7 +39,7 @@ if(page.props.flash.status==true){
         <input type="text" class="border border-gray-300 rounded-md px-4 py-2 w-[300px]" v-model="searchItem" placeholder="Search by name">
 
         <div class="mt-4 mb-4">
-            <Link :href="`/category-save-page?category_id=${0}`" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded">Add Category</Link>
+            <Link :href="`/category-save-page?category_id=${0}`" class="bg-green-500  text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300">Add Category</Link>
         </div>
 
         <EasyDataTable
@@ -53,14 +53,14 @@ if(page.props.flash.status==true){
             <template #item-action="{ id }">
                 <Link
                     :href="`/category-save-page?category_id=${id}`"
-                    class="bg-blue-500 text-white font-bold py-2 px-4 rounded"
+                    class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
                 >
                     Edit
                 </Link>
                 <button
                     v-if="page.props.user.role != 'moderator'"
                     @click="deleteCategory(id)"
-                    class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1"
+                    class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1 hover:bg-red-600 transition duration-300"
                 >
                     Delete
                 </button>

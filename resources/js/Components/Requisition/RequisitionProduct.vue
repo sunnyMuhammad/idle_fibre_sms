@@ -72,7 +72,7 @@ function confirmAction() {
 
     <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="50" :search-field="searchField" :search-value="searchItem">
         <template #item-action="{ id, product, total_requisition }">
-            <button @click="showModal(id, product, total_requisition)" class="bg-green-500 text-white font-bold py-2 px-4 rounded">Received</button>
+            <button @click="showModal(id, product, total_requisition)" class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition duration-300">Received</button>
         </template>
     </EasyDataTable>
 
@@ -95,13 +95,13 @@ function confirmAction() {
             <div class="flex justify-end mt-6 space-x-2">
               <button
                 @click="modal = false"
-                class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+                class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 transition duration-300"
               >
                 Cancel
               </button>
               <button
                 @click="confirmAction"
-                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300"
               >
                 Confirm
               </button>
@@ -110,7 +110,7 @@ function confirmAction() {
             <!-- Close icon -->
             <button
               @click="modal = false"
-              class="absolute top-2 right-2 text-gray-500 hover:text-black text-xl"
+              class="absolute top-2 right-2 text-red-500 hover:text-red-600 text-2xl transition duration-300"
             >
               &times;
             </button>

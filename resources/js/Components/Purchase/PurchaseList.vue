@@ -2,6 +2,8 @@
 import PurchaseDetails from "./PurchaseDetails.vue";
 import { ref } from "vue";
 import { router, usePage, Link, useForm } from "@inertiajs/vue3";
+import { createToaster } from "@meforma/vue-toaster";
+const toaster = createToaster({});
 const page = usePage();
 
 const headers = [
@@ -39,6 +41,13 @@ function deletePurchase(purchase_id) {
     if (confirm("Are you sure you want to delete this purchase?")) {
         router.get(`/delete-purchase?purchase_id=${purchase_id}`);
     }
+}
+
+if(page.props.flash.status==true){
+    toaster.success(page.props.flash.message);
+}else if(page.props.flash.status==false){
+    toaster.error(page.props.flash.message);
+
 }
 
 const fromDate = new URLSearchParams(window.location.search).get("fromDate");
@@ -101,19 +110,19 @@ function submitForm() {
             >
                 <button
                     @click="submitForm()"
-                    class="bg-green-600 hover:bg-green-700 text-white text-xs py-1 px-3 rounded"
+                    class="bg-green-600 hover:bg-green-700 text-white text-xs py-1 px-3 rounded transition duration-300"
                 >
                     Search Filter
                 </button>
                 <Link
                     :href="`/list-purchase`"
-                    class="bg-gray-500 hover:bg-gray-600 text-white text-xs py-1 px-3 rounded"
+                    class="bg-gray-500 hover:bg-gray-600 text-white text-xs py-1 px-3 rounded transition duration-300"
                 >
                     Clear Search
                 </Link>
                 <button
                     @click="showModal()"
-                    class="bg-blue-600 hover:bg-blue-700 text-white text-xs py-1 px-3 rounded"
+                    class="bg-blue-600 hover:bg-blue-700 text-white text-xs py-1 px-3 rounded transition duration-300"
                 >
                     View All
                 </button>
@@ -124,7 +133,7 @@ function submitForm() {
             <div class="w-full px-2">
                 <Link
                     :href="`/purchase-save-page?purchase_id=${0}`"
-                    class="bg-green-500 text-white py-2 px-4 rounded inline-block"
+                    class="bg-green-500 text-white py-2 px-4 rounded inline-block hover:bg-green-600 transition duration-300"
                 >
                     Add Purchase
                 </Link>

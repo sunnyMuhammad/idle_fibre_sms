@@ -38,13 +38,13 @@ if(page.props.flash.status==false){
             <input type="text" class="border border-gray-300 rounded-md px-4 py-2 w-[300px]" v-model="searchItem" placeholder="Search here" >
         </div>
         <div>
-            <Link :href="`/user-save-page?user_id=${0}`" class="bg-green-500 text-white  py-2 px-4 rounded">Add User</Link>
+            <Link :href="`/user-save-page?user_id=${0}`" class="bg-green-500 text-white  py-2 px-4 rounded hover:bg-green-600 transition duration-300">Add User</Link>
         </div>
     </div>
     <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">
         <template #item-action="{ id }">
-            <Link :href="`/user-save-page?user_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Edit</Link>
-            <button @click="deleteUser(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1 cursor-pointer">Delete</button>
+            <Link :href="`/user-save-page?user_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition duration-300">Edit</Link>
+            <button @click="deleteUser(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1 cursor-pointer hover:bg-red-600 transition duration-300">Delete</button>
         </template>
     </EasyDataTable>
 </template>

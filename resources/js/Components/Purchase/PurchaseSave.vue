@@ -96,14 +96,14 @@ const searchItem=ref();
         />
       </div>
 
-      <!-- Vendor name -->
+         <!-- Vendor name -->
       <div>
-        <label for="vendor_name" class="block text-sm font-medium text-gray-700 mb-1">Vendor Name</label>
-        <input
-          v-model="form.vendor_name"
-          type="text"
-          class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+        <label for="vendor" class="block text-sm font-medium text-gray-700 mb-1">Vendor Name</label>
+        <select v-model="form.vendor_id"  class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white">
+            <option>Select Vendor</option>
+            <option v-for="vendor in page.props.vendors" :key="vendor.id" :value="vendor.id">{{ vendor.name }}</option>
+        </select>
+        <p v-if="errors.vendor_id" class="text-red-500">{{ errors.vendor_id[0] }}</p>
       </div>
 
       <!-- Phone -->
@@ -191,7 +191,7 @@ const searchItem=ref();
 
     <template #item-action="{ name,id }">
 
-        <button @click="selectProduct(name,id)" class="bg-green-500 text-white font-bold py-2 px-4 rounded ml-1">Select</button>
+        <button @click="selectProduct(name,id)" class="bg-green-500 text-white font-bold py-2 px-4 rounded ml-1 hover:bg-green-600 transition duration-300 ">Select</button>
 
     </template>
 

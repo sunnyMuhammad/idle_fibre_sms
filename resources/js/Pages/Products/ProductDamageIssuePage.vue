@@ -43,7 +43,7 @@ const submitForm = () => {
                 <div class="flex justify-end mb-4">
                     <Link
                         href="/list-product"
-                        class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded text-sm"
+                        class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded text-sm transition duration-300"
                     >
                         Back
                     </Link>
@@ -75,7 +75,7 @@ const submitForm = () => {
                             v-model="form.issue"
                             type="number"
                             min="0"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition duration-300"
                         />
                     </div>
 

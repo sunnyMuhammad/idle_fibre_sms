@@ -68,19 +68,19 @@ function showModal() {
       <div class="flex flex-wrap gap-2">
         <button
           @click="submitForm()"
-          class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 text-xs rounded"
+          class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 text-xs rounded transition duration-300"
         >
           Search Filter
         </button>
         <Link
-          class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 text-xs rounded flex items-center"
+          class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 text-xs rounded flex items-center transition duration-300"
           :href="`/damage-product-list`"
         >
           Clear Search
         </Link>
         <button
           @click="showModal()"
-          class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 text-xs rounded"
+          class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 text-xs rounded transition duration-300"
         >
           View All
         </button>

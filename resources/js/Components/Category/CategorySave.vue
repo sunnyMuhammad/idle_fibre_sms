@@ -44,7 +44,7 @@ function submitForm() {
             <div class="float-end">
                 <Link
                     href="/list-category"
-                    class="inline-block bg-green-600 hover:bg-green-700 text-white py-1 px-3 text-sm rounded mx-3"
+                    class="inline-block bg-green-600 hover:bg-green-700 text-white py-1 px-3 text-sm rounded mx-3 transition duration-300"
                 >
                     Back
                 </Link>

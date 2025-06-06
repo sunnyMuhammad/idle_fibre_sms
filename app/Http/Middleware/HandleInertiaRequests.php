@@ -2,8 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Http\Request;
+use Exception;
+use App\Models\User;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Inertia\Middleware;
+use Illuminate\Http\Request;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -35,16 +39,75 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = null;
+
+        try {
+            $token = $request->cookie('token');
+
+            if ($token) {
+                $decoded = JWT::decode($token, new Key(env('JWT_KEY'), 'HS256'));
+                $user=User::where('email',$decoded->userEmail)->first();
+            }
+        } catch (Exception $e) {
+
+        }
+
+
+        $permissions = [
+            'list-user',
+            'create-user',
+            'update-user',
+            'delete-user',
+            'list-role',
+            'create-role',
+            'update-role',
+            'delete-role',
+            'list-product',
+            'create-product',
+            'update-product',
+            'delete-product',
+            'list-category',
+            'create-category',
+            'update-category',
+            'delete-category',
+            'list-vendor',
+            'create-vendor',
+            'update-vendor',
+            'delete-vendor',
+            'list-purchase',
+            'create-purchase',
+            'update-purchase',
+            'delete-purchase',
+            'list-issue-product',
+            'list-damage-product',
+            'list-minimum-product',
+            'list-requisition',
+            'create-requisition',
+            'approve-floor-receive',
+            'approve-requisition-receive',
+            'receive-requisition',
+            'receive-floor-receive',
+            'issue-product',
+            'delete-requisition',
+        ];
+
+        $can = [];
+
+        foreach ($permissions as $permission) {
+            $can[$permission] = $user?($user->can($permission)? true:false):false;
+        }
+
         return [
-            'user'=>[
-                'role'=>$request->session()->get('role'),
-                'user_name'=>$request->session()->get('user_name')
+            'user' => [
+                'role' => $request->session()->get('role'),
+                'user_name' => $request->session()->get('user_name'),
+                'can' => $can
             ],
-           'flash'=>[
-               'status'=>$request->session()->pull('status'),
-               'message'=>$request->session()->pull('message'),
-               'errors'=>$request->session()->pull('errors')
-           ]
+            'flash' => [
+                'status' => $request->session()->pull('status'),
+                'message' => $request->session()->pull('message'),
+                'errors' => $request->session()->pull('errors')
+            ]
         ];
     }
 }

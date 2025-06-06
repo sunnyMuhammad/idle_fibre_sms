@@ -91,13 +91,13 @@ if (page.props.flash.status == true) {
             <div class="w-2/6 flex items-center space-x-2">
                 <button
                     @click="submitForm()"
-                    class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded-sm"
+                    class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded-sm transition duration-300"
                 >
                     Search Filter
                 </button>
                 <Link
                     :href="`/list-requisition`"
-                    class="bg-gray-500 hover:bg-gray-600 text-white text-xs px-3 py-1 rounded-sm"
+                    class="bg-gray-500 hover:bg-gray-600 text-white text-xs px-3 py-1 rounded-sm transition duration-300"
                 >
                     Clear Search
                 </Link>
@@ -106,9 +106,8 @@ if (page.props.flash.status == true) {
 
         <div class="mt-4 mb-4">
             <Link
-                v-if="page.props.user.role!='admin'"
                 :href="`/requisition-save-page`"
-                class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
+                class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded transition duration-300"
             >
                 Create new Requisition
             </Link>
@@ -131,16 +130,15 @@ if (page.props.flash.status == true) {
             <template #item-action="{ id }">
                 <button
                     @click="showModal(id)"
-                    class="border border-gray-700 text-gray-700 text-xs px-2 py-1 rounded hover:bg-gray-200"
+                    class="border border-gray-700 text-gray-700 text-xs px-2 py-1 rounded hover:bg-gray-200 transition duration-300"
                     title="View"
                 >
                     <span class="material-icons text-sm">visibility</span>
 
                 </button>
                 <button
-                    v-if="page.props.user.role=='superadmin'"
                     @click="deleteRequisition(id)"
-                    class="bg-red-600 hover:bg-red-700 text-white text-xs px-2 py-1 rounded ml-2"
+                    class="bg-red-600 hover:bg-red-700 text-white text-xs px-2 py-1 rounded ml-2 transition duration-300"
                     title="Delete"
                 >
                     <span class="material-icons text-sm">delete</span>

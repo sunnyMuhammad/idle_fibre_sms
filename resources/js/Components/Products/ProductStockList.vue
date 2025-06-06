@@ -110,18 +110,18 @@ function showModal() {
             <div class="flex space-x-2">
                 <button
                     @click="submitForm()"
-                    class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded"
+                    class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded transition duration-300"
                 >
                     Search Filter
                 </button>
                 <Link
                     :href="`/product-stock-list`"
-                    class="bg-gray-500 hover:bg-gray-600 text-white text-xs px-3 py-1 rounded flex items-center"
+                    class="bg-gray-500 hover:bg-gray-600 text-white text-xs px-3 py-1 rounded flex items-center transition duration-300"
                     >Clear Search</Link
                 >
                 <button
                     @click="showModal()"
-                    class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded"
+                    class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded transition duration-300"
                 >
                     View All
                 </button>

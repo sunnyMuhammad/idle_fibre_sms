@@ -45,7 +45,6 @@ class UserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'role' => $request->role,
                 'phone' => $request->phone
 
             ];
@@ -72,7 +71,6 @@ class UserController extends Controller
         try {
             User::where('id', $request->user_id)->update([
                 'name' => $request->name,
-                'role' => $request->role,
                 'password' => Hash::make($request->password),
                 'phone' => $request->phone
             ]);

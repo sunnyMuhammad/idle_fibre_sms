@@ -5,12 +5,13 @@ namespace App\Helper;
 use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use stdClass;
 
 class JWTToken{
 
     //create token
 
-    public static function createToken($userEmail):string{
+    public static function createToken($userEmail):string|stdClass{
         $key=env('JWT_KEY');
         $payload=[
             'iss'=>'laravel',

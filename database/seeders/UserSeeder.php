@@ -3,9 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserSeeder extends Seeder
 {
@@ -14,12 +16,27 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
+        $superAdmin = User::create([
             'name' => 'Super Admin',
             'email' => 'superadmin@gmail.com',
             'password' => Hash::make('12345678'),
-            'role' => 'superadmin',
-
         ]);
+
+        $admin = User::create([
+            'name' => 'Admin',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('12345678'),
+        ]);
+
+
+        $role= Role::create(['name' => 'superadmin']);
+
+
+
+        $permissions = Permission::pluck('id')->all();
+        $role->syncPermissions($permissions);
+
+        $superAdmin->assignRole($role);
+
     }
 }

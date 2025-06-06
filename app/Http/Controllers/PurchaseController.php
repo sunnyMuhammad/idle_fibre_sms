@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\PurchaseProduct;
+use App\Models\Vendor;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -32,8 +33,9 @@ class PurchaseController extends Controller
     {
         $products = Product::with('category')->select('id', 'name', 'unit', 'unit_type', 'category_id', 'brand_name', 'parts_no')->get();
         $purchase_id = $request->query('purchase_id');
+        $vendors=Vendor::all();
         $purchaseProduct = PurchaseProduct::where('id', $purchase_id)->first();
-        return Inertia::render('Purchase/PurchaseSavePage', ['purchaseProduct' => $purchaseProduct, 'products' => $products]);
+        return Inertia::render('Purchase/PurchaseSavePage', ['purchaseProduct' => $purchaseProduct, 'products' => $products,'','vendors'=>$vendors]);
     }
 
     //create purchase
