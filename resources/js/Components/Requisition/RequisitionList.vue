@@ -54,6 +54,7 @@ if (page.props.flash.status == true) {
 </script>
 
 <template>
+    <RequisitionDetails v-model:modal="modal" :products="products" />
     <div class="container mx-auto p-4 bg-white">
 
         <div class="flex">
@@ -104,7 +105,7 @@ if (page.props.flash.status == true) {
             </div>
         </div>
 
-        <div class="mt-4 mb-4">
+        <div v-if="page.props.user.can['create-requisition']" class="mt-4 mb-4">
             <Link
                 :href="`/requisition-save-page`"
                 class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded transition duration-300"
@@ -112,8 +113,6 @@ if (page.props.flash.status == true) {
                 Create new Requisition
             </Link>
         </div>
-
-        <RequisitionDetails v-model:modal="modal" :products="products" />
 
         <EasyDataTable
             :headers="headers"
@@ -136,7 +135,7 @@ if (page.props.flash.status == true) {
                     <span class="material-icons text-sm">visibility</span>
 
                 </button>
-                <button
+                <button v-if="page.props.user.can['delete-requisition']"
                     @click="deleteRequisition(id)"
                     class="bg-red-600 hover:bg-red-700 text-white text-xs px-2 py-1 rounded ml-2 transition duration-300"
                     title="Delete"

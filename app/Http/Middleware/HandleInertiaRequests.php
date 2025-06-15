@@ -8,6 +8,7 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Inertia\Middleware;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -51,60 +52,19 @@ class HandleInertiaRequests extends Middleware
         } catch (Exception $e) {
 
         }
-
-
-        $permissions = [
-           'list-user',
-            'create-user',
-            'update-user',
-            'delete-user',
-            'list-role',
-            'create-role',
-            'update-role',
-            'delete-role',
-            'list-product',
-            'create-product',
-            'update-product',
-            'delete-product',
-            'list-category',
-            'create-category',
-            'update-category',
-            'delete-category',
-            'list-vendor',
-            'create-vendor',
-            'update-vendor',
-            'delete-vendor',
-            'list-purchase',
-            'create-purchase',
-            'update-purchase',
-            'delete-purchase',
-            'list-issue-product',
-            'list-damage-product',
-            'list-minimum-product',
-            'list-requisition',
-            'create-requisition',
-            'approve-floor-receive',
-            'approve-reuisition-receive',
-            'receive-requisition',
-            'receive-floor-receive',
-            'issue-product',
-            'delete-requisition',
-            'product-stock-report',
-            'product-report'
-        ];
-
+        $permissions=Permission::all();
         $can = [];
-
         foreach ($permissions as $permission) {
-            $can[$permission] = $user?($user->can($permission)? true:false):false;
+            $can[$permission->name] = $user?($user->can($permission->name)? true:false):false;
         }
 
         return [
             'user' => [
                 'role' => $request->session()->get('role'),
                 'user_name' => $request->session()->get('user_name'),
-                'can' => $can
+                'can' => $can,
             ],
+
             'flash' => [
                 'status' => $request->session()->pull('status'),
                 'message' => $request->session()->pull('message'),

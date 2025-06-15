@@ -130,7 +130,7 @@ function submitForm() {
         </div>
 
         <div class="flex flex-wrap mb-4 -mx-2">
-            <div class="w-full px-2">
+            <div v-if="page.props.user.can['create-purchase']" class="w-full px-2">
                 <Link
                     :href="`/purchase-save-page?purchase_id=${0}`"
                     class="bg-green-500 text-white py-2 px-4 rounded inline-block hover:bg-green-600 transition duration-300"
@@ -157,14 +157,14 @@ function submitForm() {
                         <div
                             class="flex flex-wrap gap-1 justify-center pt-1 pb-1"
                         >
-                            <Link
+                            <Link v-if="page.props.user.can['update-purchase']"
                                 :href="`/purchase-save-page?purchase_id=${id}`"
                                 class="bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded text-xs inline-block"
                             >
                                 <span class="material-icons text-sm">edit</span>
 
                             </Link>
-                            <button
+                            <button v-if="page.props.user.can['delete-purchase']"
                                 @click="deletePurchase(id)"
                                 class="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded text-xs inline-block"
                             >
