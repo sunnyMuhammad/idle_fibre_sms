@@ -54,7 +54,7 @@ class HandleInertiaRequests extends Middleware
 
 
         $permissions = [
-            'list-user',
+           'list-user',
             'create-user',
             'update-user',
             'delete-user',
@@ -84,11 +84,13 @@ class HandleInertiaRequests extends Middleware
             'list-requisition',
             'create-requisition',
             'approve-floor-receive',
-            'approve-requisition-receive',
+            'approve-reuisition-receive',
             'receive-requisition',
             'receive-floor-receive',
             'issue-product',
             'delete-requisition',
+            'product-stock-report',
+            'product-report'
         ];
 
         $can = [];

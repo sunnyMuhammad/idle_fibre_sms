@@ -1,23 +1,26 @@
 <script setup>
 import {usePage,useForm,router } from '@inertiajs/vue3';
 import { createToaster } from "@meforma/vue-toaster";
+import {computed} from "vue";
 const toaster = createToaster({ });
 const page=usePage();
 const user_id=new URLSearchParams(window.location.search).get('user_id');
 const user=page.props.users;
+const errors=computed(()=>page.props.flash.errors || {});
+
 const form=useForm({
     user_id:user_id,
     name:'',
     email:'',
     password:'',
-    role:'',
+    role:[],
     phone:'',
 })
 let URL='/create-user';
 if(user_id != 0 && user != null){
     form.name=user.name;
     form.email=user.email;
-    form.role=user.role;
+    form.role= user.roles.map(role => role.name);
     form.phone=user.phone;
     URL='/update-user';
 }
@@ -36,7 +39,12 @@ function submitForm() {
     },
 
   });
+
 }
+
+  const filttredRoles=computed(()=>{
+    return page.props.roles.filter(role => role.name != 'superadmin');
+})
 </script>
 
 <template>
@@ -52,32 +60,31 @@ function submitForm() {
         <label class="block text-gray-700 font-semibold mb-1">Name</label>
         <input v-model="form.name" type="text" name="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" >
       </div>
-      <p v-if="form.errors.name"  class="text-red-500">{{ form.errors.name[0] }}</p>
+      <p v-if="errors.name"  class="text-red-500">{{ errors.name[0] }}</p>
 
       <!-- Email -->
       <div>
         <label class="block text-gray-700 font-semibold mb-1">Email</label>
         <input v-model="form.email" type="email" name="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" :readonly="user_id!=0">
       </div>
-      <p v-if="form.errors.email" class="text-red-500">{{ form.errors.email[0] }}</p>
+      <p v-if="errors.email" class="text-red-500">{{ errors.email[0] }}</p>
 
       <!-- Password -->
       <div>
         <label class="block text-gray-700 font-semibold mb-1">Password</label>
         <input v-model="form.password" type="password" name="password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" >
       </div>
-         <p v-if="form.errors.password" class="text-red-500">{{ form.errors.password[0] }}</p>
+         <p v-if="errors.password" class="text-red-500">{{ errors.password[0] }}</p>
 
       <!-- Role -->
       <div>
         <label class="block text-gray-700 font-semibold mb-1">Role</label>
-        <select v-model="form.role" name="role" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" >
+        <select multiple v-model="form.role" name="role" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" >
           <option value="">Select Role</option>
-          <option value="admin">Admin</option>
-          <option value="moderator">Moderator</option>
+          <option v-for="role in filttredRoles" :key="role.id" :value="role.name" >{{ role.name }}</option>
         </select>
       </div>
-      <p v-if="form.errors.role" class="text-red-500">{{ form.errors.role[0] }}</p>
+      <p v-if="errors.role" class="text-red-500">{{ errors.role[0] }}</p>
 
       <!-- Phone -->
       <div>

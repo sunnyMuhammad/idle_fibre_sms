@@ -7,34 +7,32 @@ const page = usePage();
 
 const errors = computed(() => page.props.flash.errors || {});
 
+
 const purchase_id = new URLSearchParams(window.location.search).get("purchase_id");
 const purchaseProduct = page.props.purchaseProduct;
 
 let URL = "/create-purchase";
 
 const form = useForm({
+  product_id: "",
   product_name: "",
   unit: 0,
-  vendor_name: "",
+  vendor_id: "",
   brand_name: "",
-  phone: "",
-  address: "",
   reqisition_no: "",
   price: 0,
   purchase_id: purchase_id,
-  selected_product_id:0
+
 });
 
 if (purchase_id != 0 && purchaseProduct != null) {
-  form.product_name = purchaseProduct.product_name;
+  form.product_id = purchaseProduct.product_id;
+  form.product_name = purchaseProduct.product.name;
   form.unit = purchaseProduct.unit;
-  form.unit_type = purchaseProduct.unit_type;
-  form.vendor_name = purchaseProduct.vendor_name;
+  form.vendor_id = purchaseProduct.vendor_id;
   form.reqisition_no = purchaseProduct.reqisition_no;
   form.price = purchaseProduct.price;
   form.brand_name = purchaseProduct.brand_name;
-  form.phone = purchaseProduct.phone;
-  form.address = purchaseProduct.address;
 
   URL = "/update-purchase";
 }
@@ -59,7 +57,7 @@ function submitForm() {
   });
 }
 function selectProduct(name,id){
-    form.selected_product_id=id;
+    form.product_id=id;
     form.product_name=name;
 }
 
@@ -74,10 +72,10 @@ const headers = [
 ]
 
 const items=ref(page.props.products);
+
 const searchField = ref(["id","name", "category.name", "brand_name", "parts_no"]);
 const searchItem=ref();
 </script>
-
 <template>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
      <div class="p-6 max-w-2xl">
@@ -104,26 +102,6 @@ const searchItem=ref();
             <option v-for="vendor in page.props.vendors" :key="vendor.id" :value="vendor.id">{{ vendor.name }}</option>
         </select>
         <p v-if="errors.vendor_id" class="text-red-500">{{ errors.vendor_id[0] }}</p>
-      </div>
-
-      <!-- Phone -->
-       <div>
-        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-        <input
-          v-model="form.phone"
-          type="text"
-          class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
-
-      <!-- Address -->
-       <div>
-        <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Address</label>
-        <input
-          v-model="form.address"
-          type="text"
-          class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
       </div>
 
       <!-- Brand Name -->

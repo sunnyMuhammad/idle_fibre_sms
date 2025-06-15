@@ -78,15 +78,15 @@ const formatDate = (date) => {
           <tbody>
             <tr v-for="(product, index) in props.products" :key="index" class="hover:bg-gray-50 border-1 print:border-2">
               <td class="px-4 py-2 border text-center">{{ index + 1 }}</td>
-              <td class="px-4 py-2 border text-center">{{ product.product_name }}</td>
+              <td class="px-4 py-2 border text-center">{{ product.product.name }}</td>
               <td class="px-4 py-2 border text-center">{{ product.reqisition_no }}</td>
-              <td class="px-4 py-2 border text-center">{{ product.vendor_name }}</td>
-              <td class="px-4 py-2 border text-center">{{ product.phone }}</td>
-              <td class="px-4 py-2 border text-center">{{ product.address }}</td>
+              <td class="px-4 py-2 border text-center">{{ product.vendor.name }}</td>
+              <td class="px-4 py-2 border text-center">{{ product.vendor.phone }}</td>
+              <td class="px-4 py-2 border text-center">{{ product.vendor.address }}</td>
               <td class="px-4 py-2 border text-center">{{ product.brand_name }}</td>
               <td class="px-4 py-2 border text-center">{{ product.price }}</td>
               <td class="px-4 py-2 border text-center">{{product.unit  }}</td>
-              <td class="px-4 py-2 border text-center">{{ product.unit_type }}</td>
+              <td class="px-4 py-2 border text-center">{{ product.product.unit_type }}</td>
               <td class="px-4 py-2 border text-center">{{new Date(product.created_at).toLocaleDateString() }}</td>
             </tr>
           </tbody>

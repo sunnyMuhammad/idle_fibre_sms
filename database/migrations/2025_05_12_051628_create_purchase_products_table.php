@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('purchase_products', function (Blueprint $table) {
             $table->id();
-            $table->string('product_name');
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')->references('id')->on('products')
+                ->restrictOnDelete()->cascadeOnUpdate();
+            $table->unsignedBigInteger('vendor_id');
+            $table->foreign('vendor_id')->references('id')->on('vendors')
+                ->restrictOnDelete()->cascadeOnUpdate();
             $table->string('reqisition_no')->nullable();
-            $table->string('vendor_name')->nullable();
-            $table->string('phone')->nullable();
-            $table->string('address')->nullable();
-            $table->decimal('unit',15,2);
-            $table->decimal('price',15,2);
-            $table->string('unit_type')->nullable();
+            $table->decimal('unit', 15, 2);
+            $table->decimal('price', 15, 2);
             $table->string('brand_name')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

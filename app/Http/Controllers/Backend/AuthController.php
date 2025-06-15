@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
 use App\Models\User;
 use Inertia\Inertia;
 use App\Helper\JWTToken;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
 {
@@ -38,7 +40,7 @@ class AuthController extends Controller
           if (!$user || !Hash::check($request->password, $user->password)) {
               return redirect()->back()->with(['status'=>false,'message'=>'Invalid email or password']);
           }
-          $request->session()->put('role',$user->role);
+          //$request->session()->put('role',$user->role);
           $request->session()->put('user_name',$user->name);
           $token=JWTToken::createToken($user->email);
           return redirect('/product-stock-list')->cookie('token', $token, 60*60*24);
@@ -46,7 +48,10 @@ class AuthController extends Controller
 
     //user logout
     public function logout(Request $request){
-        $request->session()->flush();
+
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect('/')->cookie('token', '', -1);
     }

@@ -15,7 +15,7 @@ class PermissionSeeder extends Seeder
     {
 
         $permissions = [
-            'list-user',
+           'list-user',
             'create-user',
             'update-user',
             'delete-user',
@@ -45,12 +45,15 @@ class PermissionSeeder extends Seeder
             'list-requisition',
             'create-requisition',
             'approve-floor-receive',
-            'approve-requisition-receive',
+            'approve-reuisition-receive',
             'receive-requisition',
             'receive-floor-receive',
             'issue-product',
             'delete-requisition',
+            'product-stock-report',
+            'product-report'
         ];
+
 
         foreach($permissions as $permission){
             Permission::create([

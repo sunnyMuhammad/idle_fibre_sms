@@ -1,6 +1,7 @@
 <script setup>
 import { usePage, useForm, Link } from "@inertiajs/vue3";
 import ProductStockDetails from "./ProductStockDetails.vue";
+import ProductStockDetailsReport from "./ProductStockDetailsReport.vue";
 import { ref } from "vue";
 const page = usePage();
 
@@ -20,6 +21,7 @@ const headers = [
 
 const items = ref(page.props.productList);
 const modal = ref(false);
+const reportModal = ref(false);
 const searchField = ref([
     "product_name",
     "parts_no",
@@ -59,14 +61,22 @@ function submitForm() {
 function showModal() {
     modal.value = true;
 }
+function showReportModal(){
+    reportModal.value=true;
+}
 </script>
 
 <template>
+
     <ProductStockDetails
         v-model:modal="modal"
         :items="items"
         :fromDate="form.fromDate"
         :toDate="form.toDate"
+    />
+    <ProductStockDetailsReport
+        v-model:reportModal="reportModal"
+        :categories="page.props.categories"
     />
     <div class="container mx-auto p-4 bg-white">
         <div class="mb-4">
@@ -124,6 +134,13 @@ function showModal() {
                     class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded transition duration-300"
                 >
                     View All
+                </button>
+
+                 <button v-if="page.props.user.can['product-stock-report']"
+                    @click="showReportModal()"
+                    class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded transition duration-300"
+                >
+                    Report
                 </button>
             </div>
         </div>

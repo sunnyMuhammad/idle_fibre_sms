@@ -1,30 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
 
 class RoleController extends Controller
 {
-    //role list
-    public function roleList(){
-
-        $roles=Role::with('permissions')->get();
-        return Inertia::render('Roles/RoleListPage',['roles'=>$roles]);
-
-    }
-
-    //role save page
-    public function roleSavePage(Request $request){
-        $roleId=$request->role_id;
-        $permissions=Permission::all();
-        $role=Role::where('id',$roleId)->with('permissions')->first();
-        return Inertia::render('Roles/RoleSavePage',['role'=>$role,'permissions'=>$permissions]);
-    }
 
     //create role
     public function createRole(Request $request){

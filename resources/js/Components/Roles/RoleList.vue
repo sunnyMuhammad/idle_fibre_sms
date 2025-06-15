@@ -51,7 +51,7 @@ if(page.props.flash.status === true){
                 <span
                   v-for="perm in role.permissions"
                   :key="perm.id"
-                  class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full select-none"
+                  class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full "
                 >
                   {{ perm.name }}
                 </span>

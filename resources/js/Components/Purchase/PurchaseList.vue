@@ -8,15 +8,15 @@ const page = usePage();
 
 const headers = [
     { text: "ID", value: "id" },
-    { text: "Product Name", value: "product_name" },
+    { text: "Product Name", value: "product.name" },
     { text: "Reqisition no", value: "reqisition_no" },
-    { text: "Vendor Name", value: "vendor_name" },
-    { text: "Phone", value: "phone" },
-    { text: "Address", value: "address" },
+    { text: "Vendor Name", value: "vendor.name" },
+    { text: "Phone", value: "vendor.phone" },
+    { text: "Address", value: "vendor.address" },
     { text: "Brand Name", value: "brand_name" },
     { text: "Price", value: "price" },
     { text: "Unit", value: "unit" },
-    { text: "Unit Type", value: "unit_type" },
+    { text: "Unit Type", value: "product.unit_type" },
     { text: "Created Date", value: "created_at" },
     { text: "Action", value: "action" },
 ];

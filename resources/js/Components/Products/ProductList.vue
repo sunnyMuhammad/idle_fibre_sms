@@ -46,8 +46,9 @@ if (page.props.flash.status == true) {
             v-model="searchItem"
             placeholder="Search here"
         />
+        <a v-if = "page.props.user.can['product-report']" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded transition duration-300 m-1" href="/product-list-report">Download Report</a>
 
-        <div class="my-4">
+        <div v-if="page.props.user.can['create-product']" class="my-4">
             <Link
                 v-if="page.props.user.role != 'moderator'"
                 :href="`/product-save-page?product_id=${0}`"
@@ -69,7 +70,6 @@ if (page.props.flash.status == true) {
                 <template #item-image="{ image }">
                     <div class="py-2">
                         <img
-                            v-if="image"
                             :src="`/uploads/${image}`"
                             :alt="image"
                             class="object-cover h-[50px] w-[50px]"
@@ -80,27 +80,28 @@ if (page.props.flash.status == true) {
                 <template #item-action="{ id }">
                     <div class="flex gap-1">
                         <Link
-
+                            v-if="page.props.user.can['update-product']"
                             :href="`/product-save-page?product_id=${id}`"
                             class="bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded text-xs flex items-center justify-center transition duration-300"
                         >
                             <span class="material-icons text-sm">edit</span>
                         </Link>
                         <button
-
+                            v-if="page.props.user.can['delete-product']"
                             @click="deleteProduct(id)"
                             class="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded text-xs flex items-center justify-center transition duration-300"
                         >
                             <span class="material-icons text-sm">delete</span>
                         </button>
                         <Link
-
+                            v-if="page.props.user.can['issue-product']"
                             :href="`/product-issue-page?product_id=${id}`"
                             class="bg-indigo-500 hover:bg-indigo-600 text-white py-1 px-2 rounded text-xs flex items-center justify-center transition duration-300"
                         >
                             Issue
                         </Link>
                         <Link
+                            v-if="page.props.user.can['receive-floor-receive']"
                             :href="`/floor-recieve-page?product_id=${id}`"
                             class="bg-gray-500 hover:bg-gray-600 text-white py-1 px-2 rounded text-xs flex items-center justify-center transition duration-300"
                         >

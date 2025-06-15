@@ -56,7 +56,7 @@ const isActiveRoute = (route) => {
                         </Link>
                     </li>
 
-                        <li v-if="page.props.user.can['list-role']">
+                    <li v-if="page.props.user.can['list-role']">
                         <Link
                             href="/list-role"
                             :class="[
@@ -66,12 +66,14 @@ const isActiveRoute = (route) => {
                                     : 'text-white',
                             ]"
                         >
-                            <span class="material-icons">groups</span>
+                            <span class="material-icons"
+                                >admin_panel_settings</span
+                            >
                             <span>Roles</span>
                         </Link>
                     </li>
 
-                    <li v-if="page.props.user.can['list-product']">
+                    <li>
                         <Link
                             href="/product-stock-list"
                             :class="[
@@ -146,7 +148,9 @@ const isActiveRoute = (route) => {
                         </Link>
                     </li>
 
-                    <li v-if="page.props.user.can['approve-requisition-receive']">
+                    <li
+                        v-if="page.props.user.can['approve-reuisition-receive']"
+                    >
                         <Link
                             href="/requisition-received-request-list"
                             :class="[
@@ -199,6 +203,21 @@ const isActiveRoute = (route) => {
                         </Link>
                     </li>
 
+                    <li v-if="page.props.user.can['list-vendor']">
+                        <Link
+                            href="/list-vendor"
+                            :class="[
+                                'flex items-center gap-2 px-4 py-2 rounded',
+                                isActiveRoute('/list-vendor')
+                                    ? 'bg-gray-700'
+                                    : 'text-white',
+                            ]"
+                        >
+                            <span class="material-icons">store</span>
+                            <span>Vendors</span>
+                        </Link>
+                    </li>
+
                     <li v-if="page.props.user.can['list-purchase']">
                         <Link
                             href="/list-purchase"
@@ -211,21 +230,6 @@ const isActiveRoute = (route) => {
                         >
                             <span class="material-icons">shopping_bag</span>
                             <span>Purchases</span>
-                        </Link>
-                    </li>
-
-                         <li v-if="page.props.user.can['list-vendor']">
-                        <Link
-                            href="/list-vendor"
-                            :class="[
-                                'flex items-center gap-2 px-4 py-2 rounded',
-                                isActiveRoute('/list-vendor')
-                                    ? 'bg-gray-700'
-                                    : 'text-white',
-                            ]"
-                        >
-                            <span class="material-icons">shopping_bag</span>
-                            <span>Vendors</span>
                         </Link>
                     </li>
 

@@ -78,7 +78,7 @@ function submitForm() {
 
 
       <div class="float-end">
-          <Link href="/list-product" class="btn btn-success mx-3 btn-sm">
+          <Link href="/list-product" class="inline-block bg-green-600 hover:bg-green-700 text-white py-1 px-3 text-sm rounded mx-3 transition duration-300">
           Back
           </Link>
       </div>

@@ -1,31 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
 use Exception;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
-    //list user
-    public function listUser()
-    {
-        $users = User::all();
-        return Inertia::render('Users/UserListPage', ['users' => $users]);
-    }
-
-    //user save page
-    public function userSavePage(Request $request)
-    {
-        $userId = $request->user_id;
-        $users = User::where('id', $userId)->first();
-        return Inertia::render('Users/UserSavePage', ['users' => $users]);
-    }
-
     //create user
     public function createUser(Request $request)
     {
@@ -48,7 +35,9 @@ class UserController extends Controller
                 'phone' => $request->phone
 
             ];
-            User::create($data);
+            $user=User::create($data);
+            $user->assignRole($request->role);
+
             return redirect()->back()->with(['status' => true, 'message' => 'User created successfully']);
         } catch (Exception $e) {
             return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong' . $e->getMessage()]);
@@ -69,11 +58,19 @@ class UserController extends Controller
             return redirect()->back()->with(['errors' => $validator->errors()]);
         }
         try {
-            User::where('id', $request->user_id)->update([
-                'name' => $request->name,
-                'password' => Hash::make($request->password),
-                'phone' => $request->phone
+            $user=User::with('roles')->find($request->user_id);
+            $user->update([
+                'name'=>$request->name,
+                'password'=>Hash::make($request->password),
+                'phone'=>$request->phone
             ]);
+            $userRole=count($user->roles) !=0? $user->roles[0]->name : null;
+
+            //skip if current role is superadmin
+            if($userRole != 'superadmin' || $userRole == null){
+                $user->syncRoles($request->role);
+            }
+
             return redirect()->back()->with(['status' => true, 'message' => 'User updated successfully']);
         } catch (Exception $e) {
             return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong']);
@@ -83,8 +80,12 @@ class UserController extends Controller
     //delete user
     public function deleteUser(Request $request)
     {
-        $userRole = User::where('id', $request->user_id)->first()->role;
+        $user = User::where('id', $request->user_id)->with('roles')->first();
+
+        $userRole = count($user->roles)!=0 ? $user->roles[0]->name : null;
+        //skip if current role is superadmin
         if ($userRole == 'superadmin') {
+
             return redirect()->back()->with(['status' => false, 'message' => 'You can not delete This User']);
         }
         User::where('id', $request->user_id)->delete();

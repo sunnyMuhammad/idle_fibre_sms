@@ -1,27 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
 use Inertia\Inertia;
 use App\Models\Vendor;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
 
 class VendorController extends Controller
 {
-    //list vendor
-    public function listVendor(){
-        $vendors=Vendor::all();
-        return Inertia::render('Vendor/VendorListPage',['vendors'=>$vendors]);
-    }
-
-    //vendor save page
-    public function vendorSavePage(Request $request){
-        $vendor=Vendor::find($request->vendor_id);
-        return Inertia::render('Vendor/VendorSavePage',['vendor'=>$vendor]);
-    }
-
     //create vendor
     public function createVendor(Request $request)  {
 
