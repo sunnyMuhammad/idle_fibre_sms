@@ -61,8 +61,7 @@ class HandleInertiaRequests extends Middleware
 
         return [
             'user' => [
-                'role' => $request->session()->get('role'),
-                'user_name' => Auth::user()->name,
+                'user_name' => Auth::user() ? Auth::user()->name : null,
                 'can' => $can,
             ],
 
