@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Backend;
 
 use Exception;
-use Inertia\Inertia;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;

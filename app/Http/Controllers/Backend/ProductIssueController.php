@@ -50,7 +50,6 @@ class ProductIssueController extends Controller
                     ]);
 
                     $product->decrement('unit', $issue_qty);
-                    Artisan::call('cache:clear');
                     return redirect()->back()->with(['status' => true, 'message' => 'Product issued successfully']);
                 } else {
                     return redirect()->back()->with(['status' => false, 'message' => 'Issue quantity is greater than available quantity']);

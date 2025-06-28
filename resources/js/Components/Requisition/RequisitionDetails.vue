@@ -95,7 +95,7 @@ const printModal = () => {
             <div class="mt-6 text-center text-xs text-gray-500 print:hidden">
                 Press the Print button or Ctrl+P to print this summary.
             </div>
-            <div class="absolute bottom-2 text-sm font-bold w-full hidden print:flex justify-between">
+            <div class="text-sm font-bold hidden print:flex justify-between print:pt-6">
                 <p class="border-t border-black px-2">Prepared by</p>
                 <p class="border-t border-black px-2">Manager(store)</p>
                 <p class="border-t border-black px-2">Manager(Maintenence)</p>
@@ -105,3 +105,4 @@ const printModal = () => {
         </div>
     </div>
 </template>
+

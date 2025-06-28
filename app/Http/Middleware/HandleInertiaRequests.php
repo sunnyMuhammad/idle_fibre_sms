@@ -8,6 +8,7 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Inertia\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
 
 class HandleInertiaRequests extends Middleware
@@ -61,7 +62,7 @@ class HandleInertiaRequests extends Middleware
         return [
             'user' => [
                 'role' => $request->session()->get('role'),
-                'user_name' => $request->session()->get('user_name'),
+                'user_name' => Auth::user()->name,
                 'can' => $can,
             ],
 

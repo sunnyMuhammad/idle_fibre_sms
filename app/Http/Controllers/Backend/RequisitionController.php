@@ -9,9 +9,10 @@ use App\Models\Requisition;
 use Illuminate\Http\Request;
 use App\Models\RequisitionProduct;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\RequisitionReceivedRequest;
-use App\Http\Controllers\Controller;
 
 class RequisitionController extends Controller
 {
@@ -21,7 +22,7 @@ class RequisitionController extends Controller
     {
         DB::beginTransaction();
         try {
-            $created_by=$request->session()->get('user_name');
+            $created_by=Auth::user()->name;
             $data = [
                 'created_by' => $created_by
             ];

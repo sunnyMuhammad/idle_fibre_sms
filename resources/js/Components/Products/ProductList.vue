@@ -1,7 +1,6 @@
 <script setup>
 import { usePage, Link, router } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
-import { set } from "nprogress";
 import { ref,computed,watch } from "vue";
 const toaster = createToaster({});
 const page = usePage();

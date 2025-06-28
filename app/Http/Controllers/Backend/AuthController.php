@@ -40,9 +40,8 @@ class AuthController extends Controller
           if (!$user || !Hash::check($request->password, $user->password)) {
               return redirect()->back()->with(['status'=>false,'message'=>'Invalid email or password']);
           }
-          //$request->session()->put('role',$user->role);
-          $request->session()->put('user_name',$user->name);
-            Auth::login($user);
+
+          Auth::login($user);
           $token=JWTToken::createToken($user->email);
           return redirect('/product-stock-list-page')->cookie('token', $token, 60*60*24);
     }
