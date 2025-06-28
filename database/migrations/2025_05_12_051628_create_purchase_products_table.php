@@ -23,6 +23,7 @@ return new class extends Migration
             $table->decimal('unit', 15, 2);
             $table->decimal('price', 15, 2);
             $table->string('brand_name')->nullable();
+            $table->string('remarks')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

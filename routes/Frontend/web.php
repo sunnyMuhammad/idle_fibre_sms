@@ -45,8 +45,8 @@ Route::middleware([TokenVerificationMiddleware::class])->group(function () {
      * Product Management Routes
      * =====================
      */
-    Route::get('/product-stock-list', [ProductPageController::class, 'productStockList'])->name('product.stock.list');
-    Route::get('/list-product', [ProductPageController::class, 'listProduct'])->middleware('permission:list-product')->name('product.list');
+    Route::get('/product-stock-list-page', [ProductPageController::class, 'productStockListPage'])->name('product.stock.list.page');
+    Route::get('/list-product-page', [ProductPageController::class, 'listProductPage'])->middleware('permission:list-product')->name('product.list');
     Route::get('/product-save-page', [ProductPageController::class, 'productSavePage'])->middleware('permission:create-product')->name('product.save.page');
     Route::get('/product-stock-report', [ProductPageController::class, 'productStockReport'])->middleware('permission:product-stock-report')->name('product.stock.report');
     Route::get('/product-list-report', [ProductPageController::class, 'productListReport'])->middleware('permission:product-report')->name('product.list.report');

@@ -43,11 +43,10 @@ function deletePurchase(purchase_id) {
     }
 }
 
-if(page.props.flash.status==true){
+if (page.props.flash.status == true) {
     toaster.success(page.props.flash.message);
-}else if(page.props.flash.status==false){
+} else if (page.props.flash.status == false) {
     toaster.error(page.props.flash.message);
-
 }
 
 const fromDate = new URLSearchParams(window.location.search).get("fromDate");
@@ -130,7 +129,10 @@ function submitForm() {
         </div>
 
         <div class="flex flex-wrap mb-4 -mx-2">
-            <div v-if="page.props.user.can['create-purchase']" class="w-full px-2">
+            <div
+                v-if="page.props.user.can['create-purchase']"
+                class="w-full px-2"
+            >
                 <Link
                     :href="`/purchase-save-page?purchase_id=${0}`"
                     class="bg-green-500 text-white py-2 px-4 rounded inline-block hover:bg-green-600 transition duration-300"
@@ -157,19 +159,21 @@ function submitForm() {
                         <div
                             class="flex flex-wrap gap-1 justify-center pt-1 pb-1"
                         >
-                            <Link v-if="page.props.user.can['update-purchase']"
+                            <Link
+                                v-if="page.props.user.can['update-purchase']"
                                 :href="`/purchase-save-page?purchase_id=${id}`"
                                 class="bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded text-xs inline-block"
                             >
                                 <span class="material-icons text-sm">edit</span>
-
                             </Link>
-                            <button v-if="page.props.user.can['delete-purchase']"
+                            <button
+                                v-if="page.props.user.can['delete-purchase']"
                                 @click="deletePurchase(id)"
                                 class="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded text-xs inline-block"
                             >
-                                <span class="material-icons text-sm">delete</span>
-
+                                <span class="material-icons text-sm"
+                                    >delete</span
+                                >
                             </button>
                         </div>
                     </template>
@@ -177,20 +181,23 @@ function submitForm() {
             </div>
         </div>
 
-        <div class="flex gap-2 justify-end mt-4">
+        <!-- Pagination Buttons -->
+        <div class="flex justify-center gap-4 mt-6">
             <Link
+                preserve-scroll
                 v-if="page.props.purchases.prev_page_url"
                 :href="page.props.purchases.prev_page_url"
-                class="text-blue-600 hover:underline"
+                class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition duration-300"
             >
-                Prev
+                ⬅️ Previous
             </Link>
             <Link
+                preserve-scroll
                 v-if="page.props.purchases.next_page_url"
                 :href="page.props.purchases.next_page_url"
-                class="text-blue-600 hover:underline"
+                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300"
             >
-                Next
+                Next ➡️
             </Link>
         </div>
     </div>

@@ -36,7 +36,7 @@ const isActiveRoute = (route) => {
             ]"
         >
             <div class="p-4 border-b border-gray-700">
-                <h4 class="text-white">{{ page.props.user.user_name }}</h4>
+              Hi,  <h4 class="text-white">{{ page.props.user.user_name }}</h4>
             </div>
 
             <nav class="flex-grow overflow-auto">
@@ -75,10 +75,10 @@ const isActiveRoute = (route) => {
 
                     <li>
                         <Link
-                            href="/product-stock-list"
+                            href="/product-stock-list-page"
                             :class="[
                                 'flex items-center gap-2 px-4 py-2 rounded',
-                                isActiveRoute('/product-stock-list')
+                                isActiveRoute('/product-stock-list-page')
                                     ? 'bg-gray-700'
                                     : 'text-white',
                             ]"
@@ -105,10 +105,10 @@ const isActiveRoute = (route) => {
 
                     <li v-if="page.props.user.can['list-product']">
                         <Link
-                            href="/list-product"
+                            href="/list-product-page"
                             :class="[
                                 'flex items-center gap-2 px-4 py-2 rounded',
-                                isActiveRoute('/list-product')
+                                isActiveRoute('/list-product-page')
                                     ? 'bg-gray-700'
                                     : 'text-white',
                             ]"

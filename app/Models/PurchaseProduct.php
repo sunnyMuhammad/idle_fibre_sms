@@ -14,13 +14,14 @@ class PurchaseProduct extends Model
         'price',
         'reqisition_no',
         'brand_name',
+        'remarks'
     ];
 
-    public function product():BelongsTo{
+    public function product(){
         return $this->belongsTo(Product::class);
     }
 
-    public function vendor():BelongsTo  {
+    public function vendor()  {
         return $this->belongsTo(Vendor::class);
     }
 

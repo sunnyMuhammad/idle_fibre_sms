@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- Modal Overlay -->
+        <!-- Modal Overlay start -->
         <div
             v-if="modal"
             class="fixed inset-0 bg-black/15 bg-opacity-50 flex items-center justify-center z-50"
@@ -27,7 +27,7 @@
                 <input
                     v-model="product.requisition_qty"
                     class="border border-gray-300 rounded-md px-4 py-2 w-full"
-                    type="number"
+                    type="text"
                 />
                 <label for="qty_type">Qty Type</label>
                 <input
@@ -37,29 +37,28 @@
                     type="text"
                 />
 
-                 <label for="remarks">Remarks</label>
+                <label for="remarks">Remarks</label>
                 <input
                     v-model="product.remarks"
                     class="border border-gray-300 rounded-md px-4 py-2 w-full"
                     type="text"
                 />
-                 <label for="remarks">Size</label>
+                <label for="remarks">Size</label>
                 <input
                     v-model="product.size"
                     class="border border-gray-300 rounded-md px-4 py-2 w-full"
                     type="text"
                 />
 
-                 <label for="store_code">Store Code</label>
+                <label for="store_code">Store Code</label>
                 <input
                     v-model="product.store_code"
                     class="border border-gray-300 rounded-md px-4 py-2 w-full"
                     type="text"
                 />
 
-                 <label for="where_to_use">Where To Use</label>
+                <label for="where_to_use">Where To Use</label>
                 <input
-
                     v-model="product.where_to_use"
                     class="border border-gray-300 rounded-md px-4 py-2 w-full"
                     type="text"
@@ -90,9 +89,11 @@
                 </button>
             </div>
         </div>
+        <!-- Modal Overlay end -->
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Requisition Table start -->
         <div>
             <div
                 class="border border-gray-300 p-6 rounded-lg bg-white shadow-md"
@@ -157,6 +158,9 @@
                 </button>
             </div>
         </div>
+        <!-- Requisition Table end -->
+
+        <!-- Product Table start -->
         <div>
             <span>{{ status }}</span>
             <div class="flex items-center gap-2 mb-4">
@@ -166,55 +170,91 @@
                     v-model="searchItem"
                     placeholder="Search here"
                 />
-                <button @click="allProduct"
+                <button
+                    @click="allProduct"
                     class="bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600 cursor-pointer"
                 >
                     All Product
                 </button>
-                <button @click="lowStock"
+                <button
+                    @click="lowStock"
                     class="bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600 cursor-pointer"
                 >
                     Low Stock
                 </button>
-
             </div>
 
-            <EasyDataTable
-                :headers="headers"
-                :items="items"
-                alternating
-                :rows-per-page="10"
-                :search-field="searchField"
-                :search-value="searchItem"
-            >
-                <template #item-action="{ id, unit, name, unit_type }">
-                    <button
-                        @click="showModal(id, unit, name, unit_type)"
-                        class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+            <div class="relative">
+                <!-- Loading Overlay start -->
+                <div
+                    v-if="isLoading"
+                    class="absolute inset-0 bg-white/60 flex items-center justify-center z-10 rounded"
+                >
+                    <svg
+                        class="animate-spin h-6 w-6 text-indigo-600"
+                        fill="none"
+                        viewBox="0 0 24 24"
                     >
-                        Add
-                    </button>
-                </template>
-            </EasyDataTable>
+                        <circle
+                            class="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            stroke-width="4"
+                        />
+                        <path
+                            class="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                        />
+                    </svg>
+                    <span class="ml-2 text-gray-700 font-medium"
+                        >Loading...</span
+                    >
+                </div>
+                <!-- Loading Overlay end -->
+                <EasyDataTable
+                    :headers="headers"
+                    :items="items"
+                    alternating
+                    :rows-per-page="10"
+                    :search-field="searchField"
+                    :search-value="searchItem"
+                >
+                    <template #item-action="{ id, unit, name, unit_type }">
+                        <button
+                            @click="showModal(id, unit, name, unit_type)"
+                            class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+                        >
+                            Add
+                        </button>
+                    </template>
+                </EasyDataTable>
+            </div>
+            <!-- Product Table end -->
         </div>
     </div>
 </template>
 
 <script setup>
 import { usePage, useForm, router } from "@inertiajs/vue3";
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted, watch } from "vue";
 import { createToaster } from "@meforma/vue-toaster";
+import axios from "axios";
+
+
 const toaster = createToaster({});
 const page = usePage();
-const headers = [
-    { text: "ID", value: "id" },
-    { text: "Product Name", value: "name" },
-    { text: "Category", value: "category.name" },
-    { text: "Brand", value: "brand_name" },
-    { text: "Quantity", value: "unit" },
-    { text: "Action", value: "action" },
-];
+
+
 const modal = ref(false);
+const isLoading = ref(false);
+const status = ref("All Products");
+const searchItem = ref();
+const searchField = ref(["id", "name", "category.name"]);
+
+
 const product = reactive({
     id: "",
     unit: "",
@@ -225,82 +265,126 @@ const product = reactive({
     remarks: "",
     store_code: "",
     size: "",
-
 });
+
+
+const headers = [
+    { text: "ID", value: "id" },
+    { text: "Product Name", value: "name" },
+    { text: "Category", value: "category.name" },
+    { text: "Brand", value: "brand_name" },
+    { text: "Quantity", value: "unit" },
+    { text: "Action", value: "action" },
+];
+
+
+const productList = ref(JSON.parse(localStorage.getItem("productList")) || []);
+
+
+watch(
+    productList,
+    (newList) => {
+        localStorage.setItem("productList", JSON.stringify(newList));
+    },
+ { deep: true }
+);
+
+const items = ref([]);
+
+onMounted(() => {
+    allProduct();
+});
+
+async function allProduct() {
+    try {
+        isLoading.value = true;
+        const res = await axios.get("/product-list");
+        items.value = res.data.products;
+        status.value = "All Products";
+    } catch (error) {
+        console.error("Failed to load product list", error);
+    } finally {
+        isLoading.value = false;
+    }
+}
+
+async function lowStock() {
+    try {
+        isLoading.value = true;
+        const res = await axios.get("/low-stock");
+        items.value = res.data.minimumSotck;
+        status.value = "Low Stock";
+    } catch (error) {
+        console.error("Failed to load product list", error);
+    } finally {
+        isLoading.value = false;
+    }
+}
+
+
 function showModal(id, unit, name, unit_type) {
-    product.id = id;
-    product.unit = unit;
-    product.name = name;
-    product.unit_type = unit_type;
+    Object.assign(product, {
+        id,
+        unit,
+        name,
+        unit_type,
+        requisition_qty: 0,
+        where_to_use: "",
+        remarks: "",
+        store_code: "",
+        size: "",
+    });
     modal.value = true;
 }
 
-const items = ref(page.props.products);
-const status = ref('All Products');
-function allProduct(){
-    items.value=page.props.products
-    status.value='All Products'
-}
-function lowStock(){
-    items.value=page.props.minimumProducts
-    status.value='Low Stock'
-}
-const searchField = ref(["id", "name", "category.name"]);
-const searchItem = ref();
 
-const productList = ref([]);
 function addProduct() {
-    const ifExist = productList.value.find((item) => item.id === product.id);
-    if (ifExist) {
+    if (product.requisition_qty <= 0) {
+        toaster.error("Minimum Quantity is 1");
+        return;
+    }
+
+    const exists = productList.value.find((p) => p.id === product.id);
+    if (exists) {
         toaster.error("Product Already Added");
         modal.value = false;
-    } else if (product.requisition_qty == 0) {
-        toaster.error("Minimum Quantity is 1");
-    } else if (product.requisition_qty > 0) {
-        const confirmProduct = {
-            id: product.id,
-            unit: product.unit,
-            name: product.name,
-            unit_type: product.unit_type,
-            requisition_qty: product.requisition_qty,
-            where_to_use: product.where_to_use,
-            remarks: product.remarks,
-            store_code: product.store_code,
-            size: product.size
-        };
-        productList.value.push(confirmProduct);
-        modal.value = false;
-    } else {
-        alert("Enter Valid Quantity");
+        return;
     }
+
+    const newProduct = { ...product };
+    productList.value.push(newProduct);
+    modal.value = false;
 }
+
 
 function removeProduct(index) {
     productList.value.splice(index, 1);
 }
 
 
+const form = useForm({ products: "" });
 
-const form = useForm({
-    products: "",
-});
 function createRequisiton() {
-    if (productList.value.length == 0) {
+    if (productList.value.length === 0) {
         toaster.error("Please Add Product");
         return;
     }
+
     form.products = productList.value;
 
     form.post("/create-requisition", {
         preserveScroll: true,
         onSuccess: () => {
-            if (page.props.flash.status == false) {
-                toaster.error(page.props.flash.message);
-            } else if (page.props.flash.status == true) {
+            if (page.props.flash.status == true) {
                 toaster.success(page.props.flash.message);
+                localStorage.removeItem("productList");
+                productList.value = [];
                 router.visit("/list-requisition");
+            } else {
+                toaster.error(page.props.flash.message);
             }
         },
     });
 }
 </script>
+

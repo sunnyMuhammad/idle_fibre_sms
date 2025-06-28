@@ -22,17 +22,17 @@ class PurchasePageController extends Controller
             $query->whereDate('created_at', '>=', $fd)
                 ->whereDate('created_at', '<=', $td);
         })->with('product.category', 'vendor')
-            ->latest()->paginate(1000);
+            ->latest()->paginate(500)->withQueryString();
         return Inertia::render('Purchase/PurchaseListPage', ['purchases' => $purchases]);
     }
 
     //purchase save page
     public function purchaseSavePage(Request $request)
     {
-        $products = Product::with('category')->select('id', 'name', 'unit', 'unit_type', 'category_id', 'brand_name', 'parts_no')->get();
+
         $vendors = Vendor::all();
         $purchase_id = $request->query('purchase_id');
         $purchaseProduct = PurchaseProduct::with('product')->where('id', $purchase_id)->first();
-        return Inertia::render('Purchase/PurchaseSavePage', ['purchaseProduct' => $purchaseProduct, 'products' => $products, 'vendors' => $vendors]);
+        return Inertia::render('Purchase/PurchaseSavePage', ['purchaseProduct' => $purchaseProduct,  'vendors' => $vendors]);
     }
 }

@@ -39,6 +39,7 @@ class PurchaseController extends Controller
             'reqisition_no' => $request->reqisition_no,
             'vendor_id' => $request->vendor_id,
             'brand_name' => $request->brand_name,
+            'remarks' => $request->remarks,
         ];
         try {
             PurchaseProduct::create($data);
@@ -57,6 +58,7 @@ class PurchaseController extends Controller
             'product_id' => 'required',
             'vendor_id' => 'required',
             'requisiton_no' => 'nullable|numeric',
+            
         ]);
 
         if ($validator->fails()) {
@@ -70,6 +72,7 @@ class PurchaseController extends Controller
             'reqisition_no' => $request->reqisition_no,
             'vendor_id' => $request->vendor_id,
             'brand_name' => $request->brand_name,
+            'remarks' => $request->remarks,
         ];
         try {
             PurchaseProduct::where('id', $request->purchase_id)->update($data);

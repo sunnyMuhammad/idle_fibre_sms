@@ -89,7 +89,7 @@ function confirmAction() {
               <p><span style="color: blueviolet;">Total Requisition:</span> {{ showModalDetails.total_requisition }} {{ showModalDetails.unit_type }}</p>
             </div>
 
-            <input v-model="form.received_qty" class="border border-gray-300 rounded-md px-4 py-2 w-full" type="number">
+            <input v-model="form.received_qty" class="border border-gray-300 rounded-md px-4 py-2 w-full" type="text">
 
             <!-- Action buttons -->
             <div class="flex justify-end mt-6 space-x-2">

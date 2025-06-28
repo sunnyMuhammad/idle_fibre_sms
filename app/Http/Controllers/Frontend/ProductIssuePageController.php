@@ -29,7 +29,8 @@ class ProductIssuePageController extends Controller
 
             $query->whereDate('created_at', '>=', $fd)
                 ->whereDate('created_at', '<=', $td);
-        })->with('product')->select('id', 'product_id', 'unit', 'category_id', 'machine_name', 'created_at')->latest()->paginate(1000);
+        })->with('product')->select('id', 'product_id', 'unit', 'category_id', 'machine_name', 'created_at')
+        ->latest()->paginate(500)->withQueryString();
 
         return Inertia::render('Products/ProductIssuePage', ['issueProducts' => $issueProducts, 'fromDate' => $fromDate, 'toDate' => $toDate]);
     }

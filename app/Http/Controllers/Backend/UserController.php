@@ -58,19 +58,17 @@ class UserController extends Controller
             return redirect()->back()->with(['errors' => $validator->errors()]);
         }
         try {
-            $user=User::with('roles')->find($request->user_id);
-            $user->update([
-                'name'=>$request->name,
-                'password'=>Hash::make($request->password),
-                'phone'=>$request->phone
+            User::where('id', $request->user_id)->update([
+                'name' => $request->name,
+                'password' => Hash::make($request->password),
+                'phone' => $request->phone
             ]);
-            $userRole=count($user->roles) !=0? $user->roles[0]->name : null;
-
-            //skip if current role is superadmin
-            if($userRole != 'superadmin' || $userRole == null){
+            $user=User::with('roles')->find($request->user_id);
+            $userRole = count($user->roles)!=0 ? $user->roles[0]->name : null;
+            if ($userRole != 'superadmin' || $userRole == null) {
                 $user->syncRoles($request->role);
             }
-
+            
             return redirect()->back()->with(['status' => true, 'message' => 'User updated successfully']);
         } catch (Exception $e) {
             return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong']);
@@ -81,11 +79,10 @@ class UserController extends Controller
     public function deleteUser(Request $request)
     {
         $user = User::where('id', $request->user_id)->with('roles')->first();
-
+      
         $userRole = count($user->roles)!=0 ? $user->roles[0]->name : null;
-        //skip if current role is superadmin
         if ($userRole == 'superadmin') {
-
+            
             return redirect()->back()->with(['status' => false, 'message' => 'You can not delete This User']);
         }
         User::where('id', $request->user_id)->delete();

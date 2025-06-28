@@ -8,12 +8,18 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+//use App\Models\Product;
 
 class RoleController extends Controller
 {
 
     //create role
     public function createRole(Request $request){
+
+        // $product = Product::all();
+        // foreach($product as $p){
+        //     Product::where('id', $p->id)->update(['minimum_stock' => 0]);
+        // }
 
         $validation = Validator::make($request->all(), [
             'roleName' => 'required|unique:roles,name',

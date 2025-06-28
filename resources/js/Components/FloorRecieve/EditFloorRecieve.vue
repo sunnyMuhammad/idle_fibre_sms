@@ -52,7 +52,7 @@ const submitForm = () => {
           <label class="block text-sm font-medium text-gray-700 mb-1">Recieve</label>
           <input
             v-model="form.floor_recieve"
-            type="number"
+            type="text"
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
           />
           <p v-if="errors.floor_recieve" class="text-red-500">{{ errors.floor_recieve[0] }}</p>

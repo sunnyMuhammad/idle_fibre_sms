@@ -1,7 +1,8 @@
 <script setup>
 import { usePage, Link, router } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
-import { ref } from "vue";
+import { set } from "nprogress";
+import { ref,computed,watch } from "vue";
 const toaster = createToaster({});
 const page = usePage();
 
@@ -18,10 +19,21 @@ const headers = [
     { text: "Row", value: "row_no" },
     { text: "Action", value: "action" },
 ];
-const items = ref(page.props.products);
+const items = computed(() => page.props.products.data);
 
-const searchField = ref(["id", "name", "category.name", "parts_no"]);
-const searchItem = ref();
+const searchItem = ref('');
+
+watch(searchItem,(value)=>{
+   setTimeout(() => {
+        router.visit(`/list-product-page?search=${value}`,{
+        preserveState:true,
+        preserveScroll:true,
+        onSuccess:()=>{
+            items.value = page.props.products.data
+        }
+    },500);
+   })
+});
 
 function deleteProduct(porduct_id) {
     if (confirm("Are you sure you want to delete this product?")) {
@@ -47,10 +59,10 @@ if (page.props.flash.status == true) {
             placeholder="Search here"
         />
         <a v-if = "page.props.user.can['product-report']" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded transition duration-300 m-1" href="/product-list-report">Download Report</a>
+        <Link  class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded transition duration-300 m-1" href="/list-product-page">Refresh</Link>
 
         <div v-if="page.props.user.can['create-product']" class="my-4">
             <Link
-                v-if="page.props.user.role != 'moderator'"
                 :href="`/product-save-page?product_id=${0}`"
                 class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded transition duration-300"
             >
@@ -64,12 +76,10 @@ if (page.props.flash.status == true) {
                 :items="items"
                 alternating
                 :rows-per-page="50"
-                :search-field="searchField"
-                :search-value="searchItem"
             >
                 <template #item-image="{ image }">
                     <div class="py-2">
-                        <img
+                        <img v-if="image"
                             :src="`/uploads/${image}`"
                             :alt="image"
                             class="object-cover h-[50px] w-[50px]"
@@ -110,6 +120,25 @@ if (page.props.flash.status == true) {
                     </div>
                 </template>
             </EasyDataTable>
+        </div>
+
+          <div class="flex justify-center gap-4 mt-6">
+            <Link
+                preserve-scroll preserve-state
+                v-if="page.props.products.prev_page_url"
+                :href="page.props.products.prev_page_url"
+                class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition duration-300"
+            >
+                ⬅️ Previous
+            </Link>
+            <Link
+                preserve-scroll preserve-state
+                v-if="page.props.products.next_page_url"
+                :href="page.props.products.next_page_url"
+                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300"
+            >
+                Next ➡️
+            </Link>
         </div>
     </div>
 </template>

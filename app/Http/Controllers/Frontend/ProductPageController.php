@@ -10,26 +10,22 @@ use App\Models\DamageProduct;
 use App\Http\Controllers\Controller;
 use App\Services\ProductStockListService;
 
+
 class ProductPageController extends Controller
 {
-
     protected $productStockList;
     public function __construct(ProductStockListService $productStockListService)
     {
         $this->productStockList = $productStockListService;
     }
 
-    //product stock list
-    public function productStockList(Request $request)
+    //product stock list page
+    public function productStockListPage(Request $request)
     {
 
-        $productStockList = $this->productStockList->productStockList($request);
-        return Inertia::render('Products/ProductStockListPage', [
-            'productList' => $productStockList['productList'],
-            'categories' => $productStockList['categories'],
-            'category_name' => $productStockList['category_name'],
-        ]);
+        return Inertia::render('Products/ProductStockListPage');
     }
+
 
     //  product stock report
     public function productStockReport(Request $request)
@@ -46,11 +42,24 @@ class ProductPageController extends Controller
     }
 
 
-    //list product
-    public function listProduct()
+    //list product page
+    public function listProductPage(Request $request)
     {
-        $products = Product::with('category')->select('image', 'id', 'category_id', 'name', 'parts_no', 'rack_no', 'column_no', 'row_no', 'unit', 'unit_type', 'brand_name')
-            ->orderBy('id', 'desc')->get();
+        $search = $request->query('search');
+        $products = Product::with('category')
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('parts_no', 'like', "%{$search}%")
+                        ->orWhere('id', '=', $search)
+                        ->orWhereHas('category', function ($subQuery) use ($search) {
+                            $subQuery->where('name', 'like', "%{$search}%");
+                        });
+                });
+            })
+            ->orderBy('id', 'desc')
+            ->paginate(100)
+            ->withQueryString();
         return Inertia::render('Products/ProductListPage', ['products' => $products]);
     }
 
@@ -62,7 +71,7 @@ class ProductPageController extends Controller
             ->latest()->get();
         $filePath = 'report/ProductReport.csv';
         $file = fopen($filePath, 'w');
-        fputcsv($file, array('Product Name', 'Category', 'Parts No', 'Rack No', 'Column No', 'Row no', 'Available unit', 'Unit type', 'Brand Name'));
+        fputcsv($file, array('Product Name', 'Category', 'Parts No', 'Rack No', 'Column No', 'Row No', 'Available unit', 'Unit type', 'Brand Name'));
         foreach ($products as $key => $product) {
             $row = [
                 $product->name,
@@ -93,7 +102,9 @@ class ProductPageController extends Controller
     public function minimumProductList(Request $request)
     {
 
-        $products = Product::whereColumn('unit', '<=', 'minimum_stock')->with('category')->select('id', 'category_id', 'name', 'parts_no', 'rack_no', 'column_no', 'row_no', 'unit', 'unit_type', 'brand_name')->latest()->get();
+        $products = Product::whereColumn('unit', '<=', 'minimum_stock')->with('category')
+            ->select('id', 'category_id', 'name', 'parts_no', 'rack_no', 'column_no', 'row_no', 'unit', 'unit_type', 'brand_name')
+            ->orderBy('id', 'desc')->paginate(500)->withQueryString();
         return Inertia::render('Products/MinimumStockListPage', ['products' => $products]);
     }
 
@@ -109,7 +120,8 @@ class ProductPageController extends Controller
 
             $query->whereDate('created_at', '>=', $fd)
                 ->whereDate('created_at', '<=', $td);
-        })->with('product')->select('id', 'product_id', 'unit', 'created_at')->latest()->paginate(1000);
+        })->with('product')->select('id', 'product_id', 'unit', 'created_at')
+            ->latest()->paginate(500)->withQueryString();
         return Inertia::render('Products/DamageProductPage', ['damageProducts' => $damageProducts]);
     }
 }

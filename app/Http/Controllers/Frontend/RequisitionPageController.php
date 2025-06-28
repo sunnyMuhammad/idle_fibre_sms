@@ -23,7 +23,8 @@ class RequisitionPageController extends Controller
 
             $query->whereDate('created_at', '>=', $fd)
                 ->whereDate('created_at', '<=', $td);
-        })->with('requisitionProducts.product')->select('id', 'created_by', 'created_at')->latest()->paginate(1000);
+        })->with('requisitionProducts.product')->select('id', 'created_by', 'created_at')
+        ->latest()->paginate(500)->withQueryString();
 
         return Inertia::render('Requisition/RequisitionListPage', ['requisitions' => $requisitions]);
     }
@@ -31,9 +32,8 @@ class RequisitionPageController extends Controller
     //requisiton save page
     public function requisitionSavePage()
     {
-        $products = Product::with('category')->select('id', 'name', 'unit', 'unit_type', 'category_id', 'brand_name')->latest()->get();
-        $minimumProducts = Product::whereColumn('unit', '<=', 'minimum_stock')->with('category')->select('id', 'name', 'unit', 'unit_type', 'category_id', 'brand_name')->latest()->get();
-        return Inertia::render('Requisition/RequisitionSavePage', ['products' => $products, 'minimumProducts' => $minimumProducts]);
+
+        return Inertia::render('Requisition/RequisitionSavePage',);
     }
 
      //requisition product list

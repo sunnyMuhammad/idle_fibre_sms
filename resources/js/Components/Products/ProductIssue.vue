@@ -1,16 +1,16 @@
 <script setup>
-import IssueDetails from './IssueDetails.vue';
-import { usePage, useForm, Link } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import IssueDetails from "./IssueDetails.vue";
+import { usePage, useForm, Link } from "@inertiajs/vue3";
+import { ref } from "vue";
 const page = usePage();
 
 const headers = [
-    { text: 'Id', value: 'id' },
-    { text: 'Product Name', value: 'product.name' },
-    { text: 'Issue Qty', value: 'unit' },
-    { text: 'Unit Type', value: 'product.unit_type' },
-    { text: 'Machine Name', value: 'machine_name' },
-    { text: 'Issue Date', value: 'issue_date' },
+    { text: "Id", value: "id" },
+    { text: "Product Name", value: "product.name" },
+    { text: "Issue Qty", value: "unit" },
+    { text: "Unit Type", value: "product.unit_type" },
+    { text: "Machine Name", value: "machine_name" },
+    { text: "Issue Date", value: "issue_date" },
 ];
 const items = ref(page.props.issueProducts.data);
 
@@ -22,26 +22,33 @@ const formatDate = (date) => {
 };
 
 const modal = ref(false);
-const fromDate = new URLSearchParams(window.location.search).get('fromDate');
-const toDate = new URLSearchParams(window.location.search).get('toDate');
+const fromDate = new URLSearchParams(window.location.search).get("fromDate");
+const toDate = new URLSearchParams(window.location.search).get("toDate");
 const form = useForm({
     fromDate: fromDate,
     toDate: toDate,
 });
 function submitForm() {
-    form.get('/issue-product-list');
+    form.get("/issue-product-list");
 }
 function showModal() {
-    modal.value = true
+    modal.value = true;
 }
 </script>
 
 <template>
-    <IssueDetails v-model:modal="modal" :issueProduct="items" :fromDate="form.fromDate" :toDate="form.toDate"/>
+    <IssueDetails
+        v-model:modal="modal"
+        :issueProduct="items"
+        :fromDate="form.fromDate"
+        :toDate="form.toDate"
+    />
     <div class="p-4 bg-white">
         <!-- Header -->
         <div>
-            <h1 class="text-2xl font-bold mb-4 flex items-center">Product Issue List</h1>
+            <h1 class="text-2xl font-bold mb-4 flex items-center">
+                Product Issue List
+            </h1>
         </div>
 
         <!-- Filters -->
@@ -102,20 +109,22 @@ function showModal() {
         </EasyDataTable>
 
         <!-- Pagination Links -->
-        <div class="flex gap-2 justify-end mt-4">
+        <div class="flex justify-center gap-4 mt-6">
             <Link
+                preserve-scroll
                 v-if="page.props.issueProducts.prev_page_url"
                 :href="page.props.issueProducts.prev_page_url"
-                class="text-blue-600 hover:underline text-sm"
+                class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition duration-300"
             >
-                Prev
+                ⬅️ Previous
             </Link>
             <Link
+                preserve-scroll
                 v-if="page.props.issueProducts.next_page_url"
                 :href="page.props.issueProducts.next_page_url"
-                class="text-blue-600 hover:underline text-sm"
+                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300"
             >
-                Next
+                Next ➡️
             </Link>
         </div>
     </div>

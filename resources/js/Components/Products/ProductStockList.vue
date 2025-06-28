@@ -2,8 +2,14 @@
 import { usePage, useForm, Link } from "@inertiajs/vue3";
 import ProductStockDetails from "./ProductStockDetails.vue";
 import ProductStockDetailsReport from "./ProductStockDetailsReport.vue";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import axios from "axios";
+
 const page = usePage();
+const isLoading = ref(false);
+const items = ref([]);
+const modal = ref(false);
+const reportModal = ref(false);
 
 const headers = [
     { text: "Name", value: "product_name" },
@@ -19,9 +25,6 @@ const headers = [
     { text: "Unit Type", value: "unit_type" },
 ];
 
-const items = ref(page.props.productList);
-const modal = ref(false);
-const reportModal = ref(false);
 const searchField = ref([
     "product_name",
     "parts_no",
@@ -29,22 +32,35 @@ const searchField = ref([
     "column_no",
     "row_no",
 ]);
-const searchItem = ref();
-
-const fromDate = new URLSearchParams(window.location.search).get("fromDate");
-const toDate = new URLSearchParams(window.location.search).get("toDate");
-const category_id = new URLSearchParams(window.location.search).get(
-    "category_id"
-);
-const category_name = page.props.category_name;
+const searchItem = ref("");
+const category_name = ref("");
+const categories = ref([]);
 
 const form = useForm({
-    fromDate: fromDate,
-    toDate: toDate,
-    category_id: category_id,
+    fromDate: "",
+    toDate: "",
+    category_id: "",
 });
 
-function formatDate(dateStr) {
+const getAllProducts = async () => {
+    isLoading.value = true;
+    try {
+        const res = await axios.get(`/product-stock-list`);
+        items.value = res.data.productStockList.productList;
+        category_name.value = res.data.productStockList.category_name;
+        categories.value = res.data.productStockList.categories;
+    } catch (error) {
+        console.error("Failed to load product stock list", error);
+    } finally {
+        isLoading.value = false;
+    }
+};
+
+onMounted(() => {
+    getAllProducts();
+});
+
+const formatDate = (dateStr) => {
     if (!dateStr) return "-";
     const date = new Date(dateStr);
     return date.toLocaleDateString("en-GB", {
@@ -52,22 +68,29 @@ function formatDate(dateStr) {
         month: "short",
         year: "numeric",
     });
-}
+};
 
-function submitForm() {
-    form.get("/product-stock-list");
-}
+const submitForm = async () => {
+    isLoading.value = true;
+    try {
+        const res = await axios.get(
+            `/product-stock-list?fromDate=${form.fromDate}&toDate=${form.toDate}&category_id=${form.category_id}`
+        );
+        items.value = res.data.productStockList.productList;
+        category_name.value = res.data.productStockList.category_name;
+        categories.value = res.data.productStockList.categories;
+    } catch (error) {
+        console.error("Failed to load product stock list", error);
+    } finally {
+        isLoading.value = false;
+    }
+};
 
-function showModal() {
-    modal.value = true;
-}
-function showReportModal(){
-    reportModal.value=true;
-}
+const showModal = () => (modal.value = true);
+const showReportModal = () => (reportModal.value = true);
 </script>
 
 <template>
-
     <ProductStockDetails
         v-model:modal="modal"
         :items="items"
@@ -76,8 +99,40 @@ function showReportModal(){
     />
     <ProductStockDetailsReport
         v-model:reportModal="reportModal"
-        :categories="page.props.categories"
+        :categories="categories"
     />
+
+    <!-- Loading Overlay -->
+    <div
+        class="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50"
+        v-if="isLoading"
+    >
+        <div class="flex flex-col items-center space-y-2">
+            <svg
+                class="animate-spin h-10 w-10 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+            >
+                <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                />
+                <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                />
+            </svg>
+            <p class="text-white text-lg font-semibold animate-pulse">
+                Loading...
+            </p>
+        </div>
+    </div>
+
     <div class="container mx-auto p-4 bg-white">
         <div class="mb-4">
             <h1 class="text-2xl font-bold">All Product Stock List</h1>
@@ -97,7 +152,7 @@ function showReportModal(){
             >
                 <option value="">Select Category</option>
                 <option
-                    v-for="category in page.props.categories"
+                    v-for="category in categories"
                     :key="category.id"
                     :value="category.id"
                 >
@@ -125,7 +180,7 @@ function showReportModal(){
                     Search Filter
                 </button>
                 <Link
-                    :href="`/product-stock-list`"
+                    :href="`/product-stock-list-page`"
                     class="bg-gray-500 hover:bg-gray-600 text-white text-xs px-3 py-1 rounded flex items-center transition duration-300"
                     >Clear Search</Link
                 >
@@ -136,7 +191,8 @@ function showReportModal(){
                     View All
                 </button>
 
-                 <button v-if="page.props.user.can['product-stock-report']"
+                <button
+                    v-if="page.props.user.can['product-stock-report']"
                     @click="showReportModal()"
                     class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded transition duration-300"
                 >
@@ -147,11 +203,15 @@ function showReportModal(){
 
         <div class="mb-6 space-y-1 text-sm">
             <p>
-                <span class="text-violet-700 font-semibold">Searching Period:</span>
-                {{ formatDate(fromDate) }} - {{ formatDate(toDate) }}
+                <span class="text-violet-700 font-semibold"
+                    >Searching Period:</span
+                >
+                {{ formatDate(form.fromDate) }} - {{ formatDate(form.toDate) }}
             </p>
             <p>
-                <span class="text-violet-700 font-semibold">Selected Category:</span>
+                <span class="text-violet-700 font-semibold"
+                    >Selected Category:</span
+                >
                 {{ category_name ? category_name : "-" }}
             </p>
         </div>

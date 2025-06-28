@@ -3,40 +3,69 @@
 namespace App\Http\Controllers\Backend;
 
 use Exception;
-use Inertia\Inertia;
-use App\Models\Product;
-use App\Models\Category;
-use App\Models\IssueProduct;
-use Illuminate\Http\Request;
-use App\Models\DamageProduct;
-use App\Models\FloorRecieve;
-use App\Models\PurchaseProduct;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use App\Models\RequisitionReceivedRequest;
-use Illuminate\Support\Facades\File;
 use League\Csv\Reader;
+use App\Models\Product;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use App\Services\ProductStockListService;
+use Illuminate\Support\Facades\Validator;
+
 
 class ProductController extends Controller
 {
 
+    protected $productStockList;
+    public function __construct(ProductStockListService $productStockListService)
+    {
+        $this->productStockList = $productStockListService;
+    }
+
+    //all products
+   public function productList()
+{
+    $products = Product::with('category')
+        ->select('id', 'image', 'name', 'description', 'category_id', 'brand_name', 'unit', 'unit_type', 'rack_no', 'column_no', 'row_no')
+        ->orderBy('id', 'desc')
+        ->get();
+
+    return response()->json(['products' => $products]);
+}
+
+
+    // low stock
+    public function lowStock(Request $request)
+    {
+        $minimumSotck = Product::whereColumn('unit', '<=', 'minimum_stock')->with('category')
+            ->select('id', 'category_id', 'name', 'parts_no', 'rack_no', 'column_no', 'row_no', 'unit', 'unit_type', 'brand_name')
+            ->orderBy('id', 'desc')->get();
+
+
+        return response()->json([
+            'minimumSotck' => $minimumSotck,
+            'message' => 'success'
+        ], 200);
+    }
+
+
+    //product stock list
+    public function productStockList(Request $request)
+    {
+
+
+        $productStockList = $this->productStockList->productStockList($request);
+
+        return response()->json([
+            'productStockList' => $productStockList,
+            'message' => 'success',
+        ], 200);
+    }
+
+
     //create product
     public function createProduct(Request $request)
     {
-
-        // $csv = Reader::createFromPath(public_path('products/electrical.csv'));
-        // $reader = $csv->getRecords();
-        // foreach ($reader as $row) {
-
-        //     Product::create([
-        //         'name' => $row[1],
-        //         'unit' => is_numeric($row[3]) ? $row[3] : 0, // যদি সংখ্যা না হয়, তাহলে 0 দাও
-        //         'unit_type' => $row[2],
-        //         'category_id' => 9,
-        //     ]);
-
-        // }
 
         $validator = Validator::make($request->all(), [
             'name' => 'required',
@@ -69,7 +98,7 @@ class ProductController extends Controller
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $fileName = time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('uploads'), $fileName);
+                $image->storeAs('uploads', $fileName);
                 $data['image'] = $fileName;
             }
 
@@ -127,12 +156,12 @@ class ProductController extends Controller
 
                 $image = $request->file('image');
                 $fileName = time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('uploads'), $fileName);
+                $image->storeAs('uploads', $fileName);
                 $data['image'] = $fileName;
 
 
                 $oldImage = $product->image;
-                File::delete(public_path('uploads/' . $oldImage));
+                Storage::disk('public')->delete('uploads/' . $oldImage);
 
                 $product->update($data);
                 return redirect()->back()->with(['status' => true, 'message' => 'Product updated successfully']);
@@ -141,7 +170,7 @@ class ProductController extends Controller
                 $oldImage = $product->image;
                 if ($oldImage != null && $request->image == null) {
 
-                    File::delete(public_path('uploads/' . $oldImage));
+                    Storage::disk('public')->delete('uploads/' . $oldImage);
                     $data['image'] = null;
                     $product->update($data);
                     return redirect()->back()->with(['status' => true, 'message' => 'Product updated successfully']);
@@ -164,11 +193,13 @@ class ProductController extends Controller
         try {
             $product = Product::findOrFail($request->product_id);
             $oldImage = $product->image;
+
             $product->delete();
 
             if ($oldImage != null) {
-                File::delete(public_path('uploads/' . $oldImage));
+                Storage::disk('public')->delete('uploads/' . $oldImage);
             }
+
 
             return redirect()->back()->with(['status' => true, 'message' => 'Product deleted successfully']);
         } catch (Exception $e) {

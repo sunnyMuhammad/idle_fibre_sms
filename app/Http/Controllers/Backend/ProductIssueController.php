@@ -9,6 +9,7 @@ use App\Models\IssueProduct;
 use Illuminate\Http\Request;
 use App\Models\DamageProduct;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Artisan;
 
 class ProductIssueController extends Controller
 {
@@ -49,7 +50,7 @@ class ProductIssueController extends Controller
                     ]);
 
                     $product->decrement('unit', $issue_qty);
-
+                    Artisan::call('cache:clear');
                     return redirect()->back()->with(['status' => true, 'message' => 'Product issued successfully']);
                 } else {
                     return redirect()->back()->with(['status' => false, 'message' => 'Issue quantity is greater than available quantity']);

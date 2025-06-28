@@ -28,7 +28,7 @@ const form = useForm({
   column_no: "",
   row_no: "",
   brand_name: "",
-  image: "", // Initialize with null for clarity
+  image: "",
 
 });
 
@@ -44,14 +44,9 @@ if (product_id != 0 && product != null) {
   form.column_no=product.column_no;
   form.row_no=product.row_no;
   form.brand_name=product.brand_name;
-  form.image = product.image; // Pass the existing filename (can be null)
+  form.image = product.image;
   URL = "/update-product";
 }
-
-
-// NEW: Method to handle the image event from ImageUpload
-
-
 
 
 function submitForm() {
@@ -63,7 +58,7 @@ function submitForm() {
         toaster.error(page.props.flash.message);
       } else if (page.props.flash.status == true) {
         toaster.success(page.props.flash.message);
-        router.get("/list-product");
+        router.get("/list-product-page");
       }
     },
   });
@@ -74,11 +69,11 @@ function submitForm() {
   <div class="p-6 max-w-2xl w-full mx-auto">
 
 
-    <form @submit.prevent="submitForm" enctype="multipart/form-data" class="w-full max-w-lg mx-auto bg-white p-8 rounded-md shadow-md">
+    <form @submit.prevent="submitForm" class="w-full max-w-lg mx-auto bg-white p-8 rounded-md shadow-md">
 
 
       <div class="float-end">
-          <Link href="/list-product" class="inline-block bg-green-600 hover:bg-green-700 text-white py-1 px-3 text-sm rounded mx-3 transition duration-300">
+          <Link href="/list-product-page" class="inline-block bg-green-600 hover:bg-green-700 text-white py-1 px-3 text-sm rounded mx-3 transition duration-300">
           Back
           </Link>
       </div>
@@ -143,7 +138,7 @@ function submitForm() {
         <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
         <input
           v-model="form.unit"
-          type="number"
+          type="text"
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
         <p v-if="errors.unit" class="text-red-500">{{ errors.unit[0] }}</p>
@@ -153,7 +148,7 @@ function submitForm() {
         <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">Minimum Quantity</label>
         <input
           v-model="form.minimum_stock"
-          type="number"
+          type="text"
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
         <p v-if="errors.minimum_stock" class="text-red-500">{{ errors.minimum_stock[0] }}</p>

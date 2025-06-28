@@ -1,16 +1,16 @@
 <script setup>
-import RequisitionDetails from './RequisitionDetails.vue';
-import { usePage, Link, router, useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import RequisitionDetails from "./RequisitionDetails.vue";
+import { usePage, Link, router, useForm } from "@inertiajs/vue3";
+import { ref } from "vue";
 import { createToaster } from "@meforma/vue-toaster";
 const toaster = createToaster({});
 const page = usePage();
 
 const headers = [
-    { text: 'Requisition No', value: 'id' },
-    { text: 'Created By', value: 'created_by' },
-    { text: 'Created Date', value: 'created_at' },
-    { text: 'Action', value: 'action' },
+    { text: "Requisition No", value: "id" },
+    { text: "Created By", value: "created_by" },
+    { text: "Created Date", value: "created_at" },
+    { text: "Action", value: "action" },
 ];
 const items = ref(page.props.requisitions.data);
 const searchField = ref("id");
@@ -21,27 +21,27 @@ const formatDate = (date) => {
     return d;
 };
 
-const fromDate = new URLSearchParams(window.location.search).get('fromDate');
-const toDate = new URLSearchParams(window.location.search).get('toDate');
+const fromDate = new URLSearchParams(window.location.search).get("fromDate");
+const toDate = new URLSearchParams(window.location.search).get("toDate");
 const form = useForm({
     fromDate: fromDate,
     toDate: toDate,
 });
 
 function submitForm() {
-    form.get('/list-requisition');
+    form.get("/list-requisition");
 }
 
 const modal = ref(false);
 const products = ref();
 
 function showModal(id) {
-    products.value = items.value.find(item => item.id == id);
+    products.value = items.value.find((item) => item.id == id);
     modal.value = true;
 }
 
 function deleteRequisition(id) {
-    if (confirm('Are you sure you want to delete this Requisition?')) {
+    if (confirm("Are you sure you want to delete this Requisition?")) {
         router.get(`/delete-requisition?requisition_id=${id}`);
     }
 }
@@ -56,7 +56,6 @@ if (page.props.flash.status == true) {
 <template>
     <RequisitionDetails v-model:modal="modal" :products="products" />
     <div class="container mx-auto p-4 bg-white">
-
         <div class="flex">
             <div class="w-1/2">
                 <h1 class="text-2xl font-bold mb-4">Requisition List</h1>
@@ -133,23 +132,36 @@ if (page.props.flash.status == true) {
                     title="View"
                 >
                     <span class="material-icons text-sm">visibility</span>
-
                 </button>
-                <button v-if="page.props.user.can['delete-requisition']"
+                <button
+                    v-if="page.props.user.can['delete-requisition']"
                     @click="deleteRequisition(id)"
                     class="bg-red-600 hover:bg-red-700 text-white text-xs px-2 py-1 rounded ml-2 transition duration-300"
                     title="Delete"
                 >
                     <span class="material-icons text-sm">delete</span>
-
                 </button>
             </template>
         </EasyDataTable>
 
-        <div class="flex gap-2 justify-end mt-4 text-sm">
-            <Link v-if="page.props.requisitions.prev_page_url" :href="page.props.requisitions.prev_page_url" class="underline text-blue-600 hover:text-blue-800">Prev</Link>
-            <Link v-if="page.props.requisitions.next_page_url" :href="page.props.requisitions.next_page_url" class="underline text-blue-600 hover:text-blue-800">Next</Link>
+        <!-- Pagination Buttons -->
+        <div class="flex justify-center gap-4 mt-6">
+            <Link
+                preserve-scroll
+                v-if="page.props.requisitions.prev_page_url"
+                :href="page.props.requisitions.prev_page_url"
+                class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition duration-300"
+            >
+                ⬅️ Previous
+            </Link>
+            <Link
+                preserve-scroll
+                v-if="page.props.requisitions.next_page_url"
+                :href="page.props.requisitions.next_page_url"
+                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300"
+            >
+                Next ➡️
+            </Link>
         </div>
     </div>
 </template>
-

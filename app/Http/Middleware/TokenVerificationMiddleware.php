@@ -31,7 +31,7 @@ class TokenVerificationMiddleware
         if($result=="Unauthorized" || !$user){
             return redirect('/');
         }else{
-            Auth::login($user);
+
             return $next($request);
 
         }
