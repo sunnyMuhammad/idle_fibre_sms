@@ -63,12 +63,12 @@ class UserController extends Controller
                 'password' => Hash::make($request->password),
                 'phone' => $request->phone
             ]);
-            $user=User::with('roles')->find($request->user_id);
+            $user=User::find($request->user_id)->with('roles');
             $userRole = count($user->roles)!=0 ? $user->roles[0]->name : null;
             if ($userRole != 'superadmin' || $userRole == null) {
                 $user->syncRoles($request->role);
             }
-            
+
             return redirect()->back()->with(['status' => true, 'message' => 'User updated successfully']);
         } catch (Exception $e) {
             return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong']);
@@ -79,10 +79,10 @@ class UserController extends Controller
     public function deleteUser(Request $request)
     {
         $user = User::where('id', $request->user_id)->with('roles')->first();
-      
+
         $userRole = count($user->roles)!=0 ? $user->roles[0]->name : null;
         if ($userRole == 'superadmin') {
-            
+
             return redirect()->back()->with(['status' => false, 'message' => 'You can not delete This User']);
         }
         User::where('id', $request->user_id)->delete();
