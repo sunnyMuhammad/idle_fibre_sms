@@ -79,8 +79,7 @@ if (page.props.flash.status == true) {
                 <template #item-image="{ image }">
                     <div class="py-2">
                         <img v-if="image"
-                            :src="`/uploads/${image}`"
-                            :alt="image"
+                            :src="`/storage/uploads/${image}`"
                             class="object-cover h-[50px] w-[50px]"
                         />
                     </div>

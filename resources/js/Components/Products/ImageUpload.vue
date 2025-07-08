@@ -8,7 +8,7 @@ const props = defineProps({
   }
 });
 
-const currentImage = props.productImage ? `/uploads/${props.productImage}` : null;
+const currentImage = props.productImage ? `/storage/uploads/${props.productImage}` : null;
 const preview = ref(currentImage);
 const emit = defineEmits(['image']);
 
