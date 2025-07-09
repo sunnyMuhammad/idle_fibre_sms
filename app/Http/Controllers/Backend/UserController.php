@@ -63,7 +63,7 @@ class UserController extends Controller
                 'password' => Hash::make($request->password),
                 'phone' => $request->phone
             ]);
-            $user=User::find($request->user_id)->with('roles');
+            $user=User::with('roles')->find($request->user_id);
             $userRole = count($user->roles)!=0 ? $user->roles[0]->name : null;
             if ($userRole != 'superadmin' || $userRole == null) {
                 $user->syncRoles($request->role);
@@ -71,7 +71,7 @@ class UserController extends Controller
 
             return redirect()->back()->with(['status' => true, 'message' => 'User updated successfully']);
         } catch (Exception $e) {
-            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong']);
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage()]);
         }
     }
 

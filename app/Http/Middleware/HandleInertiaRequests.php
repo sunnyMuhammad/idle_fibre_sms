@@ -41,30 +41,21 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $user = null;
+        
+        $user = Auth::user();
 
-        try {
-            $token = $request->cookie('token');
-
-            if ($token) {
-                $decoded = JWT::decode($token, new Key(env('JWT_KEY'), 'HS256'));
-                $user=User::where('email',$decoded->userEmail)->first();
-            }
-        } catch (Exception $e) {
-
-        }
-        $permissions=Permission::all();
+        $permissions = Permission::all();
         $can = [];
+
         foreach ($permissions as $permission) {
-            $can[$permission->name] = $user?($user->can($permission->name)? true:false):false;
+            $can[$permission->name] = $user && $user->can($permission->name);
         }
 
         return [
             'user' => [
-                'user_name' => Auth::user() ? Auth::user()->name : null,
+                'user_name' => $user ? $user->name : null,
                 'can' => $can,
             ],
-
             'flash' => [
                 'status' => $request->session()->pull('status'),
                 'message' => $request->session()->pull('message'),

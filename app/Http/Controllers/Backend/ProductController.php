@@ -16,12 +16,6 @@ use Illuminate\Support\Facades\Validator;
 class ProductController extends Controller
 {
 
-    protected $productStockList;
-    public function __construct(ProductStockListService $productStockListService)
-    {
-        $this->productStockList = $productStockListService;
-    }
-
     //all products
    public function productList()
 {
@@ -50,11 +44,11 @@ class ProductController extends Controller
 
 
     //product stock list
-    public function productStockList(Request $request)
+    public function productStockList(ProductStockListService $productStockListService,Request $request)
     {
 
 
-        $productStockList = $this->productStockList->productStockList($request);
+      $productStockList =  $productStockListService->productStockList($request);
 
         return response()->json([
             'productStockList' => $productStockList,

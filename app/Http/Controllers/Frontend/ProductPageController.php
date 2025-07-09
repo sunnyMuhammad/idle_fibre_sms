@@ -13,25 +13,18 @@ use App\Services\ProductStockListService;
 
 class ProductPageController extends Controller
 {
-    protected $productStockList;
-    public function __construct(ProductStockListService $productStockListService)
-    {
-        $this->productStockList = $productStockListService;
-    }
-
     //product stock list page
     public function productStockListPage(Request $request)
     {
-
         return Inertia::render('Products/ProductStockListPage');
     }
 
 
     //  product stock report
-    public function productStockReport(Request $request)
+    public function productStockReport(ProductStockListService $productStockListService, Request $request)
     {
 
-        $productStockList = $this->productStockList->productStockList($request);
+        $productStockList = $productStockListService->productStockList($request);
         $filePath = 'report/StockReport.csv';
         $file = fopen($filePath, 'w');
         fputcsv($file, array('Product Name', 'Category', 'Parts No', 'Rack No', 'Column No', 'Row No', 'Floor receive', 'Total received', 'Total issue', 'Available unit', 'Unit type'));

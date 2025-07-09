@@ -17,10 +17,10 @@ const isActiveRoute = (route) => {
 </script>
 
 <template>
-    <div class="flex min-h-screen bg-gray-100">
+    <div class="flex min-h-screen bg-gray-50">
         <button
             @click="toggleMobileSidebar"
-            class="md:hidden fixed top-3 left-3 z-30 p-2 bg-gray-800 rounded shadow"
+            class="md:hidden fixed top-3 left-3 z-30 p-2 bg-gray-500 rounded shadow"
             aria-label="Toggle sidebar"
         >
             <span class="material-icons text-white">menu</span>
@@ -28,7 +28,7 @@ const isActiveRoute = (route) => {
 
         <aside
             :class="[
-                'bg-gray-900 text-white flex flex-col fixed top-0 bottom-0 transition-transform duration-300 ease-in-out z-40 w-64',
+                'bg-white text-black flex flex-col fixed top-0 bottom-0 transition-transform duration-300 ease-in-out z-40 w-64',
                 {
                     'translate-x-0': isMobileSidebarOpen,
                     '-translate-x-full md:translate-x-0': !isMobileSidebarOpen,
@@ -36,7 +36,7 @@ const isActiveRoute = (route) => {
             ]"
         >
             <div class="p-4 border-b border-gray-700">
-              Hi,  <h4 class="text-white">{{ page.props.user.user_name }}</h4>
+              Hi,  <h4 class="text-black">{{ page.props.user.user_name }}</h4>
             </div>
 
             <nav class="flex-grow overflow-auto">
@@ -47,8 +47,8 @@ const isActiveRoute = (route) => {
                             :class="[
                                 'flex items-center gap-2 px-4 py-2 rounded',
                                 isActiveRoute('/list-user')
-                                    ? 'bg-gray-700'
-                                    : 'text-white',
+                                    ? 'bg-gray-300'
+                                    : 'text-black',
                             ]"
                         >
                             <span class="material-icons">groups</span>
@@ -62,8 +62,8 @@ const isActiveRoute = (route) => {
                             :class="[
                                 'flex items-center gap-2 px-4 py-2 rounded',
                                 isActiveRoute('/list-role')
-                                    ? 'bg-gray-700'
-                                    : 'text-white',
+                                    ? 'bg-gray-300'
+                                    : 'text-black',
                             ]"
                         >
                             <span class="material-icons"
@@ -79,8 +79,8 @@ const isActiveRoute = (route) => {
                             :class="[
                                 'flex items-center gap-2 px-4 py-2 rounded',
                                 isActiveRoute('/product-stock-list-page')
-                                    ? 'bg-gray-700'
-                                    : 'text-white',
+                                    ? 'bg-gray-300'
+                                    : 'text-black',
                             ]"
                         >
                             <span class="material-icons">inventory</span>
@@ -94,8 +94,8 @@ const isActiveRoute = (route) => {
                             :class="[
                                 'flex items-center gap-2 px-4 py-2 rounded',
                                 isActiveRoute('/list-category')
-                                    ? 'bg-gray-700'
-                                    : 'text-white',
+                                    ? 'bg-gray-300'
+                                    : 'text-black',
                             ]"
                         >
                             <span class="material-icons">category</span>
@@ -109,8 +109,8 @@ const isActiveRoute = (route) => {
                             :class="[
                                 'flex items-center gap-2 px-4 py-2 rounded',
                                 isActiveRoute('/list-product-page')
-                                    ? 'bg-gray-700'
-                                    : 'text-white',
+                                    ? 'bg-gray-300'
+                                    : 'text-black',
                             ]"
                         >
                             <span class="material-icons">inventory</span>
@@ -124,8 +124,8 @@ const isActiveRoute = (route) => {
                             :class="[
                                 'flex items-center gap-2 px-4 py-2 rounded',
                                 isActiveRoute('/list-requisition')
-                                    ? 'bg-gray-700'
-                                    : 'text-white',
+                                    ? 'bg-gray-300'
+                                    : 'text-black',
                             ]"
                         >
                             <span class="material-icons">shopping_cart</span>
@@ -139,8 +139,8 @@ const isActiveRoute = (route) => {
                             :class="[
                                 'flex items-center gap-2 px-4 py-2 rounded',
                                 isActiveRoute('/requisition-product-list')
-                                    ? 'bg-gray-700'
-                                    : 'text-white',
+                                    ? 'bg-gray-300'
+                                    : 'text-black',
                             ]"
                         >
                             <span class="material-icons">receipt</span>
@@ -158,8 +158,8 @@ const isActiveRoute = (route) => {
                                 isActiveRoute(
                                     '/requisition-received-request-list'
                                 )
-                                    ? 'bg-gray-700'
-                                    : 'text-white',
+                                    ? 'bg-gray-300'
+                                    : 'text-black',
                             ]"
                         >
                             <span class="material-icons text-green-500"
@@ -175,8 +175,8 @@ const isActiveRoute = (route) => {
                             :class="[
                                 'flex items-center gap-2 px-4 py-2 rounded',
                                 isActiveRoute('/floor-receive-list')
-                                    ? 'bg-gray-700'
-                                    : 'text-white',
+                                    ? 'bg-gray-300'
+                                    : 'text-black',
                             ]"
                         >
                             <span class="material-icons text-green-500"
@@ -192,8 +192,8 @@ const isActiveRoute = (route) => {
                             :class="[
                                 'flex items-center gap-2 px-4 py-2 rounded',
                                 isActiveRoute('/issue-product-list')
-                                    ? 'bg-gray-700'
-                                    : 'text-white',
+                                    ? 'bg-gray-300'
+                                    : 'text-black',
                             ]"
                         >
                             <span class="material-icons"
@@ -209,8 +209,8 @@ const isActiveRoute = (route) => {
                             :class="[
                                 'flex items-center gap-2 px-4 py-2 rounded',
                                 isActiveRoute('/list-vendor')
-                                    ? 'bg-gray-700'
-                                    : 'text-white',
+                                    ? 'bg-gray-300'
+                                    : 'text-black',
                             ]"
                         >
                             <span class="material-icons">store</span>
@@ -224,8 +224,8 @@ const isActiveRoute = (route) => {
                             :class="[
                                 'flex items-center gap-2 px-4 py-2 rounded',
                                 isActiveRoute('/list-purchase')
-                                    ? 'bg-gray-700'
-                                    : 'text-white',
+                                    ? 'bg-gray-300'
+                                    : 'text-black',
                             ]"
                         >
                             <span class="material-icons">shopping_bag</span>
@@ -239,8 +239,8 @@ const isActiveRoute = (route) => {
                             :class="[
                                 'flex items-center gap-2 px-4 py-2 rounded',
                                 isActiveRoute('/minimum-product-list')
-                                    ? 'bg-gray-700'
-                                    : 'text-white',
+                                    ? 'bg-gray-300'
+                                    : 'text-black',
                             ]"
                         >
                             <span class="material-icons">warning</span>
@@ -254,8 +254,8 @@ const isActiveRoute = (route) => {
                             :class="[
                                 'flex items-center gap-2 px-4 py-2 rounded',
                                 isActiveRoute('/damage-product-list')
-                                    ? 'bg-gray-700'
-                                    : 'text-white',
+                                    ? 'bg-gray-300'
+                                    : 'text-black',
                             ]"
                         >
                             <span class="material-icons">dangerous</span>

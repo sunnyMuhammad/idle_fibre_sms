@@ -41,7 +41,7 @@ function submitForm(){
             >
                <label for="categories">Select Category</label>
                 <select v-model="form.category_id" id="categories" class="border border-gray-300 rounded-md px-4 py-2 w-full bg-white">
-                    <option selected>Select Category</option>
+                    <option selected value="">Select Category</option>
                     <option v-for="category in categories" :value="category.id">
                         {{ category.name }}
                     </option>

@@ -25,7 +25,7 @@ class ProductStockListService
         $categoryName = '';
 
         if ($categoryId) {
-            $categoryName = Category::where('id', $categoryId)->first()->name ?? '';
+            $categoryName = Category::where('id', $categoryId)->first();
         }
 
 
@@ -58,32 +58,37 @@ class ProductStockListService
             ->pluck('total_floor_recieve', 'product_id');
 
 
-        // Merge data
-        $productList = [];
 
-        foreach ($products as $product) {
-            $totalReceived = $receivedSums[$product->id] ?? 0;
-            $totalIssue = $issueSums[$product->id] ?? 0;
-            $floorRecieve = $floorRecieveSums[$product->id] ?? 0;
-            if ($fromDate && $toDate) {
-                if ($totalReceived == 0 && $totalIssue == 0 && $floorRecieve == 0) {
-                    continue;
-                }
+        $productList = $products->filter(function ($product) use ($receivedSums, $issueSums, $floorRecieveSums, $fd, $td) {
+
+            $id = $product->id;
+            $total_received = $receivedSums[$id] ?? 0;
+            $total_issue = $issueSums[$id] ?? 0;
+            $total_floor_recieve = $floorRecieveSums[$id] ?? 0;
+
+            if ($fd && $td) {
+                return $total_received || $total_issue || $total_floor_recieve;
             }
-            $productList[] = [
-                'product_name' => $product->name,
-                'category_name' => $product->category->name,
-                'parts_no' => $product->parts_no,
-                'rack_no' => $product->rack_no,
-                'column_no' => $product->column_no,
-                'row_no' => $product->row_no,
-                'floor_recieve' => $floorRecieve,
-                'total_received' => $totalReceived,
-                'total_issue' => $totalIssue,
-                'available_unit' => $product->unit,
-                'unit_type' => $product->unit_type,
+
+            return true;
+        })->map(function ($product) use ($receivedSums, $issueSums, $floorRecieveSums) {
+            $id = $product->id;
+            return [
+                'product_name'    => $product->name,
+                'category_name'   => $product->category->name,
+                'parts_no'        => $product->parts_no,
+                'rack_no'         => $product->rack_no,
+                'column_no'       => $product->column_no,
+                'row_no'          => $product->row_no,
+                'floor_recieve'   => $floorRecieveSums[$id] ?? 0,
+                'total_received'  => $receivedSums[$id] ?? 0,
+                'total_issue'     => $issueSums[$id] ?? 0,
+                'available_unit'  => $product->unit,
+                'unit_type'       => $product->unit_type,
             ];
-        }
+        })->values();
+
+
 
         return [
             'productList' => $productList,
