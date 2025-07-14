@@ -2,10 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use Exception;
-use App\Models\User;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 use Inertia\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,7 +37,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        
+
         $user = Auth::user();
 
         $permissions = Permission::all();

@@ -25,7 +25,7 @@ class ProductStockListService
         $categoryName = '';
 
         if ($categoryId) {
-            $categoryName = Category::where('id', $categoryId)->first();
+            $categoryName = Category::where('id', $categoryId)->first()->name;
         }
 
 
